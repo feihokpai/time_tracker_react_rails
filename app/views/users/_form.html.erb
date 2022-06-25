@@ -1,0 +1,25 @@
+
+<% form_url = (@user.persisted? ? user_path : users_path) %>
+<% form_method = (@user.persisted? ? :put : :post) %>
+<%= form_for(@user, url: form_url, html: { method: form_method }) do |f| %>
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+  </div>
+  <br/>
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <br/>
+  <br/>
+  <div class="field">
+    <%= f.check_box :admin %>
+    <%= f.label :admin %>
+  </div>
+  <br/>
+
+  <div class="actions">
+    <%= f.submit class: 'btn btn-success' %>
+  </div>
+<% end %>
