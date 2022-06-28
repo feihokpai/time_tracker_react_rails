@@ -30,6 +30,9 @@ gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
+# Add PostgreSQL SGBD
+gem "pg"
+
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
 
@@ -57,9 +60,7 @@ gem 'bootstrap', '~> 5.1.3'
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
-  # SGBD Mysql
-  gem "mysql2", ">= 0.4.4"
-
+  
   #Gems for generate rspec tests
   gem 'rspec', '~> 3.4'
   gem 'rspec-rails', '~> 5.0', '>= 5.0.2'
