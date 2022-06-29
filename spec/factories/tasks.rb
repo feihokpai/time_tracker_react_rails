@@ -1,7 +1,8 @@
 FactoryBot.define do
   factory :task do
-    name { "No name" }
-    description { "any description" }
     association :task_group
+    
+    name { "No name" }
+    description { "any description" }    
   end
 end
