@@ -1,0 +1,81 @@
+inherit_gem:
+  prettier: rubocop.yml
+
+require:
+  - rubocop-rspec
+  - rubocop-rails
+
+Layout/LineLength:
+  Max: 150
+
+Layout/IndentationConsistency:
+  EnforcedStyle: indented_internal_methods
+
+Metrics/AbcSize:
+  Max: 30
+Metrics/BlockLength:
+  Max: 30
+  Exclude:
+    - 'spec/**/*'
+Metrics/MethodLength:
+  Max: 30
+Metrics/ModuleLength:
+  Max: 150
+Metrics/ClassLength:
+  Max: 210
+Metrics/CyclomaticComplexity:
+  Max: 10
+
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+RSpec/NamedSubject:
+  Enabled: false
+RSpec/ContextWording:
+  Enabled: false
+RSpec/NestedGroups:
+  Max: 7
+RSpec/MultipleExpectations:
+  Max: 5
+RSpec/ExampleLength:
+  Max: 8
+RSpec/AnyInstance:
+  Enabled: false
+RSpec/DescribeClass:
+  Exclude:
+    - 'spec/features/*'
+
+Lint/AmbiguousBlockAssociation:
+  Enabled: false
+
+Style/Semicolon:
+  Enabled: false
+Style/AsciiComments:
+  Enabled: false
+Style/Documentation:
+  Enabled: false
+Style/Encoding:
+  Enabled: false
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+Style/StringLiteralsInInterpolation:
+  EnforcedStyle: double_quotes
+
+AllCops:
+  # DisabledByDefault: true
+  NewCops: enable
+  Exclude:
+    - 'Gemfile'
+    - 'config/routes.rb'
+    - 'db/**/*'
+    - 'bin/**/*'
+    - 'vendor/**/*'
+    - 'scripts/**/*'
+    - 'node_modules/**/*'
+    - 'config/**/*'
+    - 'storage/**/*'
+    - 'tmp/**/*'
+    - 'log/**/*'
+    - 'spec/models/tracers_result_spec.rb'
+    - 'spec/models/news_edge_result_spec.rb'
+    - 'spec/models/result_detail_spec.rb'
+    - 'spec/poros/serp_master_consumer.rb'

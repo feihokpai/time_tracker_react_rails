@@ -65,11 +65,22 @@ group :development, :test do
   gem 'rspec', '~> 3.4'
   gem 'rspec-rails', '~> 5.0', '>= 5.0.2'
   gem "factory_bot_rails"
+  gem "ffaker"
 end
 
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+
+  #Help to annotate information about the database schema in the header of class files
+  gem "annotate"
+
+  # Code formatter - I'm not sure if I actually need that. I added to copy the same rubocop config from another project
+  gem "prettier"
+
+  # Linter that change the code to follow some standards.
+  gem "rubocop-rails"
+  gem "rubocop-rspec"
 
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   # gem "rack-mini-profiler"

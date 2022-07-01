@@ -10,10 +10,36 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_30_145734) do
+ActiveRecord::Schema.define(version: 2022_06_29_150042) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "task_groups", force: :cascade do |t|
+    t.string "name"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.index ["user_id"], name: "index_task_groups_on_user_id"
+  end
+
+  create_table "tasks", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "description"
+    t.bigint "task_group_id", null: false
+    t.datetime "created_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.index ["task_group_id"], name: "index_tasks_on_task_group_id"
+  end
+
+  create_table "time_registers", force: :cascade do |t|
+    t.bigint "task_id", null: false
+    t.datetime "start_time", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "finish_time"
+    t.datetime "created_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "updated_at", precision: 6, default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.index ["task_id"], name: "index_time_registers_on_task_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.boolean "admin", default: false, null: false
@@ -29,4 +55,7 @@ ActiveRecord::Schema.define(version: 2022_01_30_145734) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "task_groups", "users"
+  add_foreign_key "tasks", "task_groups"
+  add_foreign_key "time_registers", "tasks"
 end

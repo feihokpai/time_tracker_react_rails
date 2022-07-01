@@ -21,10 +21,10 @@ class UsersController < ApplicationController
 
   def update_user_with_params
     @user.update!({ name: params[:name], email: params[:email], admin: params[:admin] })
-  rescue StandardError => ex
-    show_error_on_console(ex)    
+  rescue StandardError => e
+    show_error_on_console(e)    
     @error = true
-    flash[:error] = "Something went wrong: #{ex.message}"
+    flash[:error] = "Something went wrong: #{e.message}"
   end
 
   def show_error_on_console(exception)
