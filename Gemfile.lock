@@ -117,6 +117,9 @@ GEM
     ffi (1.15.5)
     globalid (1.0.0)
       activesupport (>= 5.0)
+    haml (5.2.2)
+      temple (>= 0.8.0)
+      tilt
     i18n (1.10.0)
       concurrent-ruby (~> 1.0)
     importmap-rails (1.0.2)
@@ -165,6 +168,11 @@ GEM
       ast (~> 2.4.1)
     pg (1.4.1)
     popper_js (2.9.3)
+    prettier (3.1.2)
+      syntax_tree (>= 2.3.1)
+      syntax_tree-haml (>= 1.1.0)
+      syntax_tree-rbs (>= 0.2.0)
+    prettier_print (0.1.0)
     public_suffix (4.0.6)
     puma (5.6.1)
       nio4r (~> 2.0)
@@ -200,6 +208,7 @@ GEM
       zeitwerk (~> 2.5)
     rainbow (3.1.1)
     rake (13.0.6)
+    rbs (2.6.0)
     regexp_parser (2.2.0)
     reline (0.3.1)
       io-console (~> 0.5)
@@ -270,6 +279,17 @@ GEM
     stimulus-rails (1.0.2)
       railties (>= 6.0.0)
     strscan (3.0.1)
+    syntax_tree (2.8.0)
+      prettier_print
+    syntax_tree-haml (1.2.0)
+      haml (>= 5.2)
+      prettier_print
+      syntax_tree (>= 2.0.1)
+    syntax_tree-rbs (0.4.0)
+      prettier_print
+      rbs
+      syntax_tree (>= 2.0.1)
+    temple (0.8.2)
     thor (1.2.1)
     tilt (2.0.10)
     timeout (0.2.0)
@@ -312,6 +332,7 @@ DEPENDENCIES
   importmap-rails
   jbuilder
   pg
+  prettier
   puma (~> 5.0)
   rails (~> 7.0.1)
   rspec (~> 3.4)

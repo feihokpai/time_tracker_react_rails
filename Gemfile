@@ -75,6 +75,10 @@ group :development do
   #Help to annotate information about the database schema in the header of class files
   gem "annotate"
 
+  # Code formatter - I'm not sure if I actually need that. I added to copy the same rubocop config from another project
+  gem "prettier"
+
+  # Linter that change the code to follow some standards.
   gem "rubocop-rails"
   gem "rubocop-rspec"
 
