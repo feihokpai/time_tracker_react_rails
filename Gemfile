@@ -75,6 +75,9 @@ group :development do
   #Help to annotate information about the database schema in the header of class files
   gem "annotate"
 
+  gem "rubocop-rails"
+  gem "rubocop-rspec"
+
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   # gem "rack-mini-profiler"
 
