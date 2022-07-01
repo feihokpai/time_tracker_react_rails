@@ -14,6 +14,6 @@ FactoryBot.define do
     association :task_group
     
     name { "No name" }
-    description { "any description" }    
+    description { FFaker::Book.description }    
   end
 end
