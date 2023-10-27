@@ -52,6 +52,9 @@ gem "sassc-rails"
 # Bootstrap - a tool for helping to create a nicer frontend.
 gem 'bootstrap', '~> 5.1.3'
 
+#Used to allow the react client make requests to Rails backend.
+gem 'rack-cors'
+
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
