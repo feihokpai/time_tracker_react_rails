@@ -31,7 +31,7 @@ function TasksPage(){
   function processTaskGroups(taskGroup, index){
     console.log("call processTaskGroups");
     return (
-      <Container key={index} onMouseOver={() => setSelectedTaskGroup(taskGroup.id)}>
+      <Container key={index} className="mb-3" onClick={() => setSelectedTaskGroup(taskGroup.id)}>
         <Row >
           <Col className="taskGroup" xs={6}>
             {taskGroup.name}        
