@@ -1,4 +1,8 @@
 import { useState, useEffect } from "react";
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import './css/TasksPage.css'
 
 function TasksPage(){
   const [data, setData] = useState(null);
@@ -26,18 +30,25 @@ function TasksPage(){
   function processTaskGroups(taskGroup, index){
     console.log("call processTaskGroups");
     return (
-      <li key={index}>{taskGroup.name}
-        <ul>
-          {taskGroup.tasks.map(processTask)}
-        </ul>
-      </li>
+      <Container key={index}>
+        <Row >
+          <Col className="taskGroup" xs={6}>
+            {taskGroup.name}        
+          </Col>
+          <Col></Col>
+        </Row>
+        {taskGroup.tasks.map(processTask)}
+      </Container>
     );
   }
 
   function processTask(task, index){
     console.log("call processTask");
     return (
-      <li key={index} title={task.description}>{task.name}</li>
+      <Row key={index} title={task.description}>
+        <Col className="rowTask" xs={6}>{task.name}</Col>        
+        <Col></Col>
+      </Row>
     );
   }
 

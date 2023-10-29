@@ -1,0 +1,12 @@
+.taskGroup {
+  background-color: #282c34;
+  color: white;  
+}
+
+.taskGroup:hover {
+  background-color: grey;
+}
+
+.rowTask:hover {
+  background-color: grey;
+}
