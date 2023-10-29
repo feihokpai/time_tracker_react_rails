@@ -4,6 +4,8 @@ function TasksPage(){
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
 
+  useEffect(getTasks, []);
+
   function getTasks(){
     const apiUrl = 'http://localhost:3000/task_groups/';
     fetch(apiUrl)
@@ -20,8 +22,6 @@ function TasksPage(){
         setError(err);
       });
   }
-
-  useEffect(getTasks, []);
 
   function processTaskGroups(taskGroup, index){
     console.log("call processTaskGroups");
