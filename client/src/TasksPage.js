@@ -23,14 +23,34 @@ function TasksPage(){
 
   useEffect(getTasks, []);
 
+  function processTaskGroups(taskGroup, index){
+    console.log("call processTaskGroups");
+    return (
+      <li key={index}>{taskGroup.name}
+        <ul>
+          {taskGroup.tasks.map(processTask)}
+        </ul>
+      </li>
+    );
+  }
+
+  function processTask(task, index){
+    console.log("call processTask");
+    return (
+      <li key={index} title={task.description}>{task.name}</li>
+    );
+  }
+
   return (
     <div>
       <h1>React App</h1>
       {error && <p>Error: {error.message}</p>}
       {data && (
         <div>
-          <h2>Data from Rails Backend:</h2>
-          <pre>{JSON.stringify(data, null, 2)}</pre>
+          <h2>Tasks</h2>
+          <ul>
+            {data.map(processTaskGroups)}
+          </ul>
         </div>
       )}
     </div>
