@@ -7,6 +7,7 @@ import './css/TasksPage.css'
 function TasksPage(){
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
+  const [selectedTaskGroup, setSelectedTaskGroup] = useState(null);
 
   useEffect(getTasks, []);
 
@@ -30,14 +31,14 @@ function TasksPage(){
   function processTaskGroups(taskGroup, index){
     console.log("call processTaskGroups");
     return (
-      <Container key={index}>
+      <Container key={index} onMouseOver={() => setSelectedTaskGroup(taskGroup.id)}>
         <Row >
           <Col className="taskGroup" xs={6}>
             {taskGroup.name}        
           </Col>
           <Col></Col>
         </Row>
-        {taskGroup.tasks.map(processTask)}
+        {taskGroup.id === selectedTaskGroup && taskGroup.tasks.map(processTask)}
       </Container>
     );
   }
