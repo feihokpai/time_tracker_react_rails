@@ -13,4 +13,14 @@ class Task < ApplicationRecord
   belongs_to :task_group
   delegate :user, to: :task_group
   has_many :time_registers
+
+  def json_version
+    json = as_json(only: [:id, :name, :description])
+    json['start_time'] = start_time
+    json
+  end
+
+  def start_time
+    time_registers.where(finish_time: nil).last&.start_time
+  end
 end
