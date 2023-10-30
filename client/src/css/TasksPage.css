@@ -10,3 +10,13 @@
 .rowTask:hover {
   background-color: grey;
 }
+
+.taskButtons {
+  display: flex; 
+  justify-content: flex-end
+}
+
+.taskButton {
+  /* margin-left: 10px; */
+}
+

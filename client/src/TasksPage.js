@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 import './css/TasksPage.css'
 
 function TasksPage(){
@@ -59,11 +60,23 @@ function TasksPage(){
   function processTask(task, index){
     console.log("call processTask");
     return (
-      <Row key={index} title={task.description}>
-        <Col className="rowTask" xs={6}>{task.name}</Col>        
+      <Row className="rowTask" key={index} title={task.description}>
+        <Col xs={8}>{task.name}</Col>        
+        <Col className="taskButtons" xs={4}>
+          <Container className="taskButton">
+            <Button>Start</Button>
+          </Container>
+          <Container className="taskButton">
+            <Button>Edit</Button>
+          </Container>
+        </Col>
         <Col></Col>
       </Row>
     );
+  }
+
+  function startTimer(idTask){
+    console.log("Start timer from task "+idTask);
   }
 
   return (
