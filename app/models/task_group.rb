@@ -12,9 +12,9 @@ class TaskGroup < ApplicationRecord
   belongs_to :user
   has_many :tasks
 
-  def as_json_with_tasks
+  def json_version
     main_hash = as_json(only: [:id, :name])
-    main_hash["tasks"] = tasks.as_json(only: [:id, :name, :description])
+    main_hash["tasks"] = tasks.map(&:json_version)
     main_hash
   end
 end
