@@ -28,15 +28,28 @@ function TasksPage(){
       });
   }
 
+  function processTasksPanel(){
+    console.log("call processTaskPanel");
+    return (
+      <Container>
+        <Row >
+          <Col xs={7}>
+            {data.map(processTaskGroups)}
+          </Col>
+          <Col></Col>
+        </Row>        
+      </Container>
+    );
+  }
+
   function processTaskGroups(taskGroup, index){
     console.log("call processTaskGroups");
     return (
       <Container key={index} className="mb-3" onClick={() => setSelectedTaskGroup(taskGroup.id)}>
         <Row >
-          <Col className="taskGroup" xs={6}>
+          <Col className="taskGroup">
             {taskGroup.name}        
           </Col>
-          <Col></Col>
         </Row>
         {taskGroup.id === selectedTaskGroup && taskGroup.tasks.map(processTask)}
       </Container>
@@ -60,9 +73,7 @@ function TasksPage(){
       {data && (
         <div>
           <h2>Tasks</h2>
-          <ul>
-            {data.map(processTaskGroups)}
-          </ul>
+          {processTasksPanel()}
         </div>
       )}
     </div>
