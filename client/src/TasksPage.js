@@ -64,7 +64,8 @@ function TasksPage(){
         <Col xs={8}>{task.name}</Col>        
         <Col className="taskButtons" xs={4}>
           <Container className="taskButton">
-            <Button>Start</Button>
+          { task.start_time == null && ( <Button onClick={ () => startTimer(task.id) }>Start</Button> ) }
+          { task.start_time != null && ( <input type="text" value={calculateDuration(task)} style={{ width: '9ch' }} readOnly /> ) }
           </Container>
           <Container className="taskButton">
             <Button>Edit</Button>
@@ -75,8 +76,34 @@ function TasksPage(){
     );
   }
 
+  function calculateDuration(taskJson){
+    let startTimeString = taskJson.start_time;
+    let startTime = new Date(startTimeString);
+    let durationInMiliseconds = new Date() - startTime;
+    let durationInSeconds = parseInt(durationInMiliseconds/1000);
+    let durationInMinutes = parseInt(durationInSeconds / 60);
+    let durationInHours = parseInt(durationInMinutes / 60);
+    let secondsPart = durationInSeconds % 60;    
+    let minutesPart = durationInMinutes % 60;
+    let hoursPart = durationInHours;
+    return hoursPart+":"+minutesPart+":"+secondsPart;
+  }
+
   function startTimer(idTask){
-    console.log("Start timer from task "+idTask);
+    const apiUrl = 'http://localhost:3000/tasks/'+idTask+"/start";
+    fetch(apiUrl, { method: 'POST', mode: "cors", })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();        
+      })
+      .then((jsonData) => {
+        getTasks();
+      })
+      .catch((err) => {
+        setError(err);
+      });
   }
 
   return (
