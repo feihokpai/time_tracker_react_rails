@@ -9,8 +9,13 @@ function TasksPage(){
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [selectedTaskGroup, setSelectedTaskGroup] = useState(null);
+  let intervalId = null;
 
-  useEffect(getTasks, []);
+  useEffect( () => { 
+    getTasks();
+    // Clean up the interval when the component unmounts
+    return () => { clearInterval(intervalId); }; 
+  }, []);
 
   function getTasks(){
     const apiUrl = 'http://localhost:3000/task_groups/';
@@ -23,6 +28,7 @@ function TasksPage(){
       })
       .then((jsonData) => {
         setData(jsonData);
+        intervalId = setInterval( () => { setData(jsonData) }, 1000);
       })
       .catch((err) => {
         setError(err);
@@ -44,7 +50,6 @@ function TasksPage(){
   }
 
   function processTaskGroups(taskGroup, index){
-    console.log("call processTaskGroups");
     return (
       <Container key={index} className="mb-3" onClick={() => setSelectedTaskGroup(taskGroup.id)}>
         <Row >
@@ -58,7 +63,6 @@ function TasksPage(){
   }
 
   function processTask(task, index){
-    console.log("call processTask");
     return (
       <Row className="rowTask" key={index} title={task.description}>
         <Col xs={8}>{task.name}</Col>        
