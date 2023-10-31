@@ -87,10 +87,14 @@ function TasksPage(){
     let durationInSeconds = parseInt(durationInMiliseconds/1000);
     let durationInMinutes = parseInt(durationInSeconds / 60);
     let durationInHours = parseInt(durationInMinutes / 60);
-    let secondsPart = durationInSeconds % 60;    
-    let minutesPart = durationInMinutes % 60;
-    let hoursPart = durationInHours;
+    let secondsPart = value_with_zero(durationInSeconds % 60);
+    let minutesPart = value_with_zero(durationInMinutes % 60);
+    let hoursPart = value_with_zero(durationInHours);
     return hoursPart+":"+minutesPart+":"+secondsPart;
+  }
+
+  function value_with_zero(value){
+    return (value < 10) ? "0"+value : value;
   }
 
   function startTimer(idTask){
