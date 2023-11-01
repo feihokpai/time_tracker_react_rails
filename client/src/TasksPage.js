@@ -68,12 +68,12 @@ function TasksPage(){
         <Col xs={8}>{task.name}</Col>        
         <Col className="taskButtons" xs={4}>
           <Container className="taskButton">
-          { task.start_time == null && ( <Button onClick={ () => startTimer(task.id) }>Start</Button> ) }
-          { task.start_time != null && ( <input type="text" value={calculateDuration(task)} style={{ width: '9ch' }} readOnly /> ) }
+            { task.duration_today != null && "("+task.duration_today+")" }
           </Container>
           <Container className="taskButton">
-            <Button>Edit</Button>
-          </Container>
+          { task.start_time == null && ( <Button onClick={ () => startTimer(task.id) }>Start</Button> ) }
+          { task.start_time != null && ( <input type="text" value={calculateDuration(task)} style={{ width: '9ch' }} readOnly /> ) }
+          </Container>          
         </Col>
         <Col></Col>
       </Row>
