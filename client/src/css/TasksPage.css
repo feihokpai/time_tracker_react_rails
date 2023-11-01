@@ -11,12 +11,7 @@
   background-color: grey;
 }
 
-.taskButtons {
+.taskButtonsColumn {
   display: flex; 
   justify-content: flex-end
 }
-
-.taskButton {
-  /* margin-left: 10px; */
-}
-
