@@ -56,6 +56,12 @@ function TasksPage(){
           <Col className="taskGroup">
             {taskGroup.name}        
           </Col>
+          <Col className="taskGroup" xs={2}>
+            { taskGroup.id === selectedTaskGroup && "Spent today" }
+          </Col>
+          <Col className="taskGroup" xs={2}>
+            { taskGroup.id === selectedTaskGroup && "Commands" }
+          </Col>          
         </Row>
         {taskGroup.id === selectedTaskGroup && taskGroup.tasks.map(processTask)}
       </Container>
