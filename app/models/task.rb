@@ -1,3 +1,5 @@
+require 'time_utilities'
+
 # == Schema Information
 #
 # Table name: tasks
@@ -17,10 +19,25 @@ class Task < ApplicationRecord
   def json_version
     json = as_json(only: [:id, :name, :description])
     json['start_time'] = start_time
+    json['duration_today'] = duration_today_as_string
     json
   end
 
   def start_time
-    time_registers.where(finish_time: nil).last&.start_time
+    time_registers.unfinished.last&.start_time
+  end
+
+  def duration_today_as_string
+    duration = duration_today_in_seconds
+    duration.zero? ? nil : TimeUtilities.duration_as_string(duration)
+  end
+
+  def duration_today_in_seconds
+    duration_in_day(Time.current)
+  end
+
+  def duration_in_day(timestamp)
+    registers = time_registers.finished.where("Date(finish_time) = ?", timestamp.to_date)
+    registers.sum(&:duration_in_seconds)
   end
 end
