@@ -9,12 +9,14 @@ function TasksPage(){
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [selectedTaskGroup, setSelectedTaskGroup] = useState(null);
-  let intervalId = null;
+  const [intervalId, setIntervalId] = useState(null);
+  const [lastTime, setLastTime] = useState(null);
 
   useEffect( () => { 
     getTasks();
+    startInterval();
     // Clean up the interval when the component unmounts
-    return () => { clearInterval(intervalId); }; 
+    return () => { clearCurrentInterval(); }; 
   }, []);
 
   function getTasks(){
@@ -28,11 +30,21 @@ function TasksPage(){
       })
       .then((jsonData) => {
         setData(jsonData);
-        intervalId = setInterval( () => { setData(jsonData) }, 1000);
       })
       .catch((err) => {
         setError(err);
       });
+  }
+
+  function startInterval(){
+    let id = setInterval( () => { setLastTime(new Date()); }, 1000);
+    setIntervalId(id);
+  }
+
+  function clearCurrentInterval(){
+    if(intervalId != null){
+      clearInterval(intervalId);
+    }
   }
 
   function processTasksPanel(){
