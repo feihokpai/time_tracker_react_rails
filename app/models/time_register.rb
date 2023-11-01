@@ -11,4 +11,11 @@
 #
 class TimeRegister < ApplicationRecord
   belongs_to :task
+
+  scope :finished, -> { where.not(finish_time: nil) }
+  scope :unfinished, -> { where(finish_time: nil) }  
+
+  def duration_in_seconds
+    finish_time - start_time
+  end
 end
