@@ -94,7 +94,7 @@ function TasksPage(){
             { task.start_time != null && 
               (<Row>
                 <Col xs={8}><input type="text" className="inputTimer" value={calculateDuration(task)} style={{ width: '8ch' }} readOnly title="Click to edit timer"/></Col>
-                <Col xs={4}><CloseButton title="Stop timer" /></Col>
+                <Col xs={4}><CloseButton title="Stop timer" onClick={ () => stopTimer(task.id) }/></Col>
                </Row>
               ) 
             }
@@ -123,6 +123,10 @@ function TasksPage(){
 
   function startTimer(idTask){
     requestServer('POST', "http://localhost:3000/tasks/"+idTask+"/start", (jsonData) => getTasks());
+  }
+
+  function stopTimer(idTask){
+    requestServer('POST', "http://localhost:3000/tasks/"+idTask+"/stop", (jsonData) => getTasks());
   }
 
   return (
