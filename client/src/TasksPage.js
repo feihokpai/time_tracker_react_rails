@@ -21,17 +21,18 @@ function TasksPage(){
   }, []);
 
   function getTasks(){
-    const apiUrl = 'http://localhost:3000/task_groups/';
-    fetch(apiUrl)
+    requestServer('GET', 'http://localhost:3000/task_groups/', (jsonData) => setData(jsonData));
+  }
+
+  function requestServer(httpMethod, url, callback){
+    fetch(url, { method: httpMethod, mode: "cors", })
       .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
         return response.json();        
       })
-      .then((jsonData) => {
-        setData(jsonData);
-      })
+      .then(callback)
       .catch((err) => {
         setError(err);
       });
@@ -121,20 +122,7 @@ function TasksPage(){
   }
 
   function startTimer(idTask){
-    const apiUrl = 'http://localhost:3000/tasks/'+idTask+"/start";
-    fetch(apiUrl, { method: 'POST', mode: "cors", })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();        
-      })
-      .then((jsonData) => {
-        getTasks();
-      })
-      .catch((err) => {
-        setError(err);
-      });
+    requestServer('POST', "http://localhost:3000/tasks/"+idTask+"/start", (jsonData) => getTasks());
   }
 
   return (
