@@ -24,7 +24,15 @@ class Task < ApplicationRecord
   end
 
   def start_time
-    time_registers.unfinished.last&.start_time
+    active_timer&.start_time
+  end
+
+  def stop
+    active_timer&.update!(finish_time: Time.current)
+  end
+
+  def active_timer
+    time_registers.unfinished.last
   end
 
   def duration_today_as_string

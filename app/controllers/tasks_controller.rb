@@ -8,6 +8,13 @@ class TasksController < ApplicationController
     end
   end
 
+  def stop_timer
+    @task.stop if task_active?
+    render json: { message: "Timer stopped" }
+  rescue StandardError => ex
+    render json: { error: "Error trying to stop the task: #{ex.message}" }
+  end
+
   private
 
     def task_active?

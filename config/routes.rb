@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 
   get "/task_groups", to: "task_groups#index"
   post "/tasks/:id/start", to: "tasks#start_timer"
+  post "/tasks/:id/stop", to: "tasks#stop_timer"
 
   root to: "home#index"
 end
