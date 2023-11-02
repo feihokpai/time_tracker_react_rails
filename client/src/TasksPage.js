@@ -48,7 +48,6 @@ function TasksPage(){
   }
 
   function processTasksPanel(){
-    console.log("call processTaskPanel");
     return (
       <Container>
         <Row >
@@ -88,9 +87,9 @@ function TasksPage(){
           <Container xs={2} title="Time the user spent in the task today">
             { task.duration_today != null && "("+task.duration_today+")" }
           </Container>
-          <Container xs={2}>
-          { task.start_time == null && ( <Button onClick={ () => startTimer(task.id) }>Start</Button> ) }
-          { task.start_time != null && ( <input type="text" value={calculateDuration(task)} style={{ width: '9ch' }} readOnly /> ) }
+          <Container xs={2}>          
+            { task.start_time == null && ( <Button onClick={ () => startTimer(task.id) }>Start</Button> ) }
+            { task.start_time != null && ( <input type="text" value={calculateDuration(task)} style={{ width: '9ch' }} readOnly /> ) }
           </Container>          
         </Col>
         <Col></Col>
