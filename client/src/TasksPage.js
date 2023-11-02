@@ -3,6 +3,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import CloseButton from 'react-bootstrap/CloseButton';
 import './css/TasksPage.css'
 
 function TasksPage(){
@@ -88,11 +89,16 @@ function TasksPage(){
             { task.duration_today != null && "("+task.duration_today+")" }
           </Container>
           <Container xs={2}>          
-            { task.start_time == null && ( <Button onClick={ () => startTimer(task.id) }>Start</Button> ) }
-            { task.start_time != null && ( <input type="text" value={calculateDuration(task)} style={{ width: '9ch' }} readOnly /> ) }
+            { task.start_time == null && ( <Button onClick={ () => startTimer(task.id) } title="Start timer">Start</Button> ) }
+            { task.start_time != null && 
+              (<Row>
+                <Col xs={8}><input type="text" className="inputTimer" value={calculateDuration(task)} style={{ width: '8ch' }} readOnly title="Click to edit timer"/></Col>
+                <Col xs={4}><CloseButton title="Stop timer" /></Col>
+               </Row>
+              ) 
+            }
           </Container>          
         </Col>
-        <Col></Col>
       </Row>
     );
   }
