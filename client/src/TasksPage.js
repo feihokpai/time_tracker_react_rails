@@ -4,6 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import CloseButton from 'react-bootstrap/CloseButton';
+import Modal from 'react-bootstrap/Modal';
 import './css/TasksPage.css'
 
 function TasksPage(){
@@ -12,6 +13,8 @@ function TasksPage(){
   const [selectedTaskGroup, setSelectedTaskGroup] = useState(null);
   const [intervalId, setIntervalId] = useState(null);
   const [lastTime, setLastTime] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [taskToEdit, setTaskToEdit] = useState(null);
 
   useEffect( () => { 
     getTasks();
@@ -93,7 +96,11 @@ function TasksPage(){
             { task.start_time == null && ( <Button onClick={ () => startTimer(task.id) } title="Start timer">Start</Button> ) }
             { task.start_time != null && 
               (<Row>
-                <Col xs={8}><input type="text" className="inputTimer" value={calculateDuration(task)} style={{ width: '8ch' }} readOnly title="Click to edit timer"/></Col>
+                <Col xs={8}>
+                  <input type="text" className="inputTimer" style={{ width: '8ch' }} readOnly title="Click to edit timer"
+                      value={calculateDuration(task)}
+                      onClick={ () => selectedTaskToEdit(task) } />
+                </Col>
                 <Col xs={4}><CloseButton title="Stop timer" onClick={ () => stopTimer(task.id) }/></Col>
                </Row>
               ) 
@@ -129,6 +136,33 @@ function TasksPage(){
     requestServer('POST', "http://localhost:3000/tasks/"+idTask+"/stop", (jsonData) => getTasks());
   }
 
+  function selectedTaskToEdit(task){
+    setTaskToEdit(task);
+    setShowModal(true);
+  }
+
+  function modalEditTask(){
+    return (
+      <Modal show={showModal} onHide={() => setShowModal(false) }>
+        <Modal.Header closeButton>
+          <Modal.Title>{ taskToEdit != null && "Editing task '"+taskToEdit.name+"'"}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {"You can edit the time you started and finished the task"}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={ () => saveChanges() }>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
+
+  function saveChanges(){
+    setShowModal(false);
+  }
+
   return (
     <div>
       <h1>React App</h1>
@@ -137,6 +171,7 @@ function TasksPage(){
         <div>
           <h2>Tasks</h2>
           {processTasksPanel()}
+          {modalEditTask()}
         </div>
       )}
     </div>
