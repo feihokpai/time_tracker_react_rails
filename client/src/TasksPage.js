@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import CloseButton from 'react-bootstrap/CloseButton';
-import Modal from 'react-bootstrap/Modal';
+import ModalEditTask from './ModalEditTask';
 import './css/TasksPage.css'
 
 function TasksPage(){
@@ -141,25 +141,11 @@ function TasksPage(){
     setShowModal(true);
   }
 
-  function modalEditTask(){
-    return (
-      <Modal show={showModal} onHide={() => setShowModal(false) }>
-        <Modal.Header closeButton>
-          <Modal.Title>{ taskToEdit != null && "Editing task '"+taskToEdit.name+"'"}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {"You can edit the time you started and finished the task"}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" onClick={ () => saveChanges() }>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    );
+  function saveChanges(){
+    setShowModal(false);
   }
 
-  function saveChanges(){
+  function onCloseModal(){
     setShowModal(false);
   }
 
@@ -171,7 +157,9 @@ function TasksPage(){
         <div>
           <h2>Tasks</h2>
           {processTasksPanel()}
-          {modalEditTask()}
+          <ModalEditTask show={showModal} task={taskToEdit} 
+              onSave={() => saveChanges()} 
+              onClose={() => onCloseModal()}/>
         </div>
       )}
     </div>
