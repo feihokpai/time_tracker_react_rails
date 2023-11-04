@@ -8,7 +8,7 @@ import Col from 'react-bootstrap/Col';
 
 function ModalEditTask(props){
   const { task } = props;
-  const [formObject, setFormObject] = useState({ startTimeHour: "", startTimeDate: "", finishTimeHour: null, finishTimeDate: null });
+  const [formObject, setFormObject] = useState({ startTimeHour: "", startTimeDate: "", finishTimeHour: "", finishTimeDate: "" });
 
   useEffect(setValuesToModalForm, [task]);
 
@@ -27,6 +27,10 @@ function ModalEditTask(props){
     let formCopy = { ...formObject };
     formCopy['startTimeDate'] = task.start_time.slice(0,10);
     formCopy['startTimeHour'] = task.start_time.slice(11, 16);
+    if(task.finish_time != null){
+      formCopy['finishTimeDate'] = task.finish_time.slice(0,10);
+      formCopy['finishTimeHour'] = task.finish_time.slice(11, 16);
+    }
     setFormObject(formCopy);
   }
 
@@ -57,13 +61,25 @@ function ModalEditTask(props){
                         value={formObject.startTimeHour} 
                         onChange={onChangeInputs}/>
                   </Col>
-                </Row>
-                
+                </Row>                
               </Container>
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Finish Time</Form.Label>
-              <Form.Control type="text" disabled/>              
+              <Container>
+                <Row>
+                  <Col xs="4">
+                    <Form.Control type="text" name="finishTimeDate" className="inputTimer" style={{ width: '12ch' }} disabled
+                        value={formObject.finishTimeDate}
+                        onChange={onChangeInputs}/>
+                  </Col>
+                  <Col>
+                    <Form.Control type="text" name="finishTimeHour" className="inputTimer" style={{ width: '8ch' }} 
+                        value={formObject.finishTimeHour} 
+                        onChange={onChangeInputs}/>
+                  </Col>
+                </Row>                
+              </Container>
             </Form.Group>
           </Form>
         }
