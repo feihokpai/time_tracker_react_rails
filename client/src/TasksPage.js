@@ -129,10 +129,6 @@ function TasksPage(){
     setShowModal(true);
   }
 
-  function saveChanges(){
-    setShowModal(false);
-  }
-
   function onCloseModal(){
     setShowModal(false);
   }
@@ -145,9 +141,8 @@ function TasksPage(){
         <div>
           <h2>Tasks</h2>
           {processTasksPanel()}
-          <ModalEditTask show={showModal} task={taskToEdit} 
-              onSave={() => saveChanges()} 
-              onClose={() => onCloseModal()}/>
+          <ModalEditTask show={showModal} task={taskToEdit}
+              onClose={() => onCloseModal()} />
         </div>
       )}
     </div>
