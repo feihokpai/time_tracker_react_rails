@@ -5,6 +5,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import CloseButton from 'react-bootstrap/CloseButton';
 import ModalEditTask from './ModalEditTask';
+import requestServer from "./request_server";
 import './css/TasksPage.css'
 
 function TasksPage(){
@@ -24,22 +25,9 @@ function TasksPage(){
   }, []);
 
   function getTasks(){
-    requestServer('GET', 'http://localhost:3000/task_groups/', (jsonData) => setData(jsonData));
+    requestServer('GET', 'http://localhost:3000/task_groups/', (json) => setData(json), (err) => setError(err));
   }
 
-  function requestServer(httpMethod, url, callback){
-    fetch(url, { method: httpMethod, mode: "cors", })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();        
-      })
-      .then(callback)
-      .catch((err) => {
-        setError(err);
-      });
-  }
 
   function startInterval(){
     let id = setInterval( () => { setLastTime(new Date()); }, 1000);
@@ -129,11 +117,11 @@ function TasksPage(){
   }
 
   function startTimer(idTask){
-    requestServer('POST', "http://localhost:3000/tasks/"+idTask+"/start", (jsonData) => getTasks());
+    requestServer('POST', "http://localhost:3000/tasks/"+idTask+"/start", (jsonData) => getTasks(), (err) => setError(err));
   }
 
   function stopTimer(idTask){
-    requestServer('POST', "http://localhost:3000/tasks/"+idTask+"/stop", (jsonData) => getTasks());
+    requestServer('POST', "http://localhost:3000/tasks/"+idTask+"/stop", (jsonData) => getTasks(), (err) => setError(err));
   }
 
   function selectedTaskToEdit(task){
