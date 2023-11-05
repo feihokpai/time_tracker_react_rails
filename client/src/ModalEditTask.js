@@ -35,7 +35,24 @@ function ModalEditTask(props){
   }
 
   function onSave(event){
-    
+    const startTimeIsoString = mountIsoString(formObject.startTimeDate, formObject.startTimeHour);
+    const finishTimeIsoString = mountIsoString(formObject.finishTimeDate, formObject.finishTimeHour);
+  }
+
+  function mountIsoString(dateString, hourString){
+    if(dateString == "" && hourString == ""){
+      return null;
+    }
+    const dateParts = dateString.split('-');
+    const timeParts = hourString.split(':');
+    const combinedDate = new Date(
+      parseInt(dateParts[0]),   // Year
+      parseInt(dateParts[1]) - 1, // Month (0-11)
+      parseInt(dateParts[2]),   // Day
+      parseInt(timeParts[0]),   // Hours
+      parseInt(timeParts[1])    // Minutes
+    );
+    return combinedDate.toISOString();
   }
 
   return (
