@@ -52,7 +52,7 @@ function ModalEditTask(props){
               <Container>
                 <Row>
                   <Col xs="4">
-                    <Form.Control type="text" name="startTimeDate" className="inputTimer" style={{ width: '12ch' }} disabled
+                    <Form.Control type="date" name="startTimeDate" className="inputTimer" style={{ width: '18ch' }}
                         value={formObject.startTimeDate}
                         onChange={onChangeInputs}/>
                   </Col>
@@ -69,7 +69,7 @@ function ModalEditTask(props){
               <Container>
                 <Row>
                   <Col xs="4">
-                    <Form.Control type="text" name="finishTimeDate" className="inputTimer" style={{ width: '12ch' }} disabled
+                    <Form.Control type="date" name="finishTimeDate" className="inputTimer" style={{ width: '18ch' }}
                         value={formObject.finishTimeDate}
                         onChange={onChangeInputs}/>
                   </Col>
