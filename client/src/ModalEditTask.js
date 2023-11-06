@@ -8,7 +8,9 @@ import Col from 'react-bootstrap/Col';
 
 function ModalEditTask(props){
   const { task } = props;
+  const [validated, setValidated] = useState(false);
   const [formObject, setFormObject] = useState({ startTimeHour: "", startTimeDate: "", finishTimeHour: "", finishTimeDate: "" });
+  const hourFormatRegex = "^([0-1][0-9]|2[0-3]):[0-5][0-9]$";
 
   useEffect(setValuesToModalForm, [task]);
 
@@ -35,8 +37,24 @@ function ModalEditTask(props){
   }
 
   function onSave(event){
-    const startTimeIsoString = mountIsoString(formObject.startTimeDate, formObject.startTimeHour);
-    const finishTimeIsoString = mountIsoString(formObject.finishTimeDate, formObject.finishTimeHour);
+    const form = event.currentTarget;
+    let validationPassed = form.checkValidity();
+    setValidated(true);
+
+    if(validationPassed){
+      const startTimeIsoString = mountIsoString(formObject.startTimeDate, formObject.startTimeHour);
+      const finishTimeIsoString = mountIsoString(formObject.finishTimeDate, formObject.finishTimeHour);
+      console.log("start Time to send to server: "+startTimeIsoString);
+      console.log("finish Time to send to server: "+finishTimeIsoString);
+    }else{
+      console.log("No request will be done");
+    }
+    avoidSubmit(event);
+  }
+
+  function avoidSubmit(event){
+    event.preventDefault();
+    event.stopPropagation();
   }
 
   function mountIsoString(dateString, hourString){
@@ -63,20 +81,27 @@ function ModalEditTask(props){
       <Modal.Body>
         {
           props.task != null &&
-          <Form>
+          <Form noValidate onSubmit={onSave} validated={validated}>
             <Form.Group className="mb-3">
               <Form.Label>Start Time</Form.Label>
               <Container>
                 <Row>
-                  <Col xs="4">
-                    <Form.Control type="date" name="startTimeDate" className="inputTimer" style={{ width: '18ch' }}
+                  <Col xs="5">
+                    <Form.Control type="date" name="startTimeDate" className="inputTimer" style={{ width: '20ch' }} required
                         value={formObject.startTimeDate}
-                        onChange={onChangeInputs}/>
+                        onChange={onChangeInputs}/>                    
+                    <Form.Control.Feedback type="invalid">
+                      Invalid date
+                    </Form.Control.Feedback>
                   </Col>
                   <Col>
-                    <Form.Control type="text" name="startTimeHour" className="inputTimer" style={{ width: '8ch' }} 
+                    <Form.Control type="text" name="startTimeHour" className="inputTimer" style={{ width: '10ch' }} required
                         value={formObject.startTimeHour} 
-                        onChange={onChangeInputs}/>
+                        onChange={onChangeInputs}
+                        pattern={hourFormatRegex} />
+                    <Form.Control.Feedback type="invalid">
+                      Fill a valid hour in format XX:XX
+                    </Form.Control.Feedback>
                   </Col>
                 </Row>                
               </Container>
@@ -85,26 +110,33 @@ function ModalEditTask(props){
               <Form.Label>Finish Time</Form.Label>
               <Container>
                 <Row>
-                  <Col xs="4">
-                    <Form.Control type="date" name="finishTimeDate" className="inputTimer" style={{ width: '18ch' }}
+                  <Col xs="5">
+                    <Form.Control type="date" name="finishTimeDate" className="inputTimer" style={{ width: '20ch' }}
                         value={formObject.finishTimeDate}
                         onChange={onChangeInputs}/>
+                    <Form.Control.Feedback type="invalid">
+                      Invalid date
+                    </Form.Control.Feedback>
                   </Col>
                   <Col>
-                    <Form.Control type="text" name="finishTimeHour" className="inputTimer" style={{ width: '8ch' }} 
+                    <Form.Control type="text" name="finishTimeHour" className="inputTimer" style={{ width: '10ch' }} 
                         value={formObject.finishTimeHour} 
-                        onChange={onChangeInputs}/>
+                        onChange={onChangeInputs}
+                        pattern={hourFormatRegex} />
+                    <Form.Control.Feedback type="invalid">
+                      Fill a valid hour in format XX:XX
+                    </Form.Control.Feedback>
                   </Col>
                 </Row>                
               </Container>
             </Form.Group>
+            <Button type="submit">
+              Save Changes
+            </Button>
           </Form>
         }
       </Modal.Body>
-      <Modal.Footer>
-        <Button variant="primary" onClick={onSave}>
-          Save Changes
-        </Button>
+      <Modal.Footer>        
       </Modal.Footer>
     </Modal>
   );  
