@@ -33,8 +33,12 @@ function ModalEditTask(props){
     if(task.finish_time != null){
       formCopy['finishTimeDate'] = task.finish_time.slice(0,10);
       formCopy['finishTimeHour'] = task.finish_time.slice(11, 16);
+    }else{
+      formCopy['finishTimeDate'] = formCopy['finishTimeHour'] = "";      
     }
     setFormObject(formCopy);
+    setValidated(false);
+    setformValidated({ finishTimeHour: null, finishTimeDate: null });
   }
 
   function onSave(event){
@@ -87,8 +91,17 @@ function ModalEditTask(props){
     return combinedDate.toISOString();
   }
 
+  function onClose(){
+    let formCopy = { ...formObject };
+    formCopy['finishTimeDate'] = formCopy['finishTimeHour'] = "";      
+    setFormObject(formCopy);
+    setValidated(false);
+    setformValidated({ finishTimeHour: null, finishTimeDate: null });
+    props.onClose();
+  }
+
   return (
-    <Modal show={props.show} onHide={props.onClose}>
+    <Modal show={props.show} onHide={onClose}>
       <Modal.Header closeButton>
         <Modal.Title>{ props.task != null && "Editing task '"+props.task.name+"'"}</Modal.Title>
       </Modal.Header>
