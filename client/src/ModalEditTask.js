@@ -10,6 +10,7 @@ function ModalEditTask(props){
   const { task } = props;
   const [validated, setValidated] = useState(false);
   const [formObject, setFormObject] = useState({ startTimeHour: "", startTimeDate: "", finishTimeHour: "", finishTimeDate: "" });
+  const [formValidated, setformValidated] = useState({ finishTimeHour: null, finishTimeDate: null });
   const hourFormatRegex = "^([0-1][0-9]|2[0-3]):[0-5][0-9]$";
 
   useEffect(setValuesToModalForm, [task]);
@@ -37,11 +38,11 @@ function ModalEditTask(props){
   }
 
   function onSave(event){
-    const form = event.currentTarget;
-    let validationPassed = form.checkValidity();
+    let validation1Passed = event.currentTarget.checkValidity();
+    let validation2Passed = customValidation();
     setValidated(true);
 
-    if(validationPassed){
+    if(validation1Passed && validation2Passed){
       const startTimeIsoString = mountIsoString(formObject.startTimeDate, formObject.startTimeHour);
       const finishTimeIsoString = mountIsoString(formObject.finishTimeDate, formObject.finishTimeHour);
       console.log("start Time to send to server: "+startTimeIsoString);
@@ -52,13 +53,26 @@ function ModalEditTask(props){
     avoidSubmit(event);
   }
 
+  function customValidation(){
+    let formValidationCopy = { ...formValidated };    
+    if((formObject.finishTimeDate === "" && formObject.finishTimeHour !== "")){
+      formValidationCopy['finishTimeDate'] = false;
+    }else if(formObject.finishTimeDate !== "" && formObject.finishTimeHour === ""){
+      formValidationCopy['finishTimeHour'] = false;
+    }else{
+      formValidationCopy['finishTimeDate'] = formValidationCopy['finishTimeHour'] = true;
+    }
+    setformValidated(formValidationCopy);
+    return formValidationCopy['finishTimeDate'] === true && formValidationCopy['finishTimeHour'] === true;
+  }
+
   function avoidSubmit(event){
     event.preventDefault();
     event.stopPropagation();
   }
 
   function mountIsoString(dateString, hourString){
-    if(dateString == "" && hourString == ""){
+    if(dateString === "" && hourString === ""){
       return null;
     }
     const dateParts = dateString.split('-');
@@ -113,19 +127,23 @@ function ModalEditTask(props){
                   <Col xs="5">
                     <Form.Control type="date" name="finishTimeDate" className="inputTimer" style={{ width: '20ch' }}
                         value={formObject.finishTimeDate}
-                        onChange={onChangeInputs}/>
+                        onChange={onChangeInputs}
+                        isInvalid={formValidated['finishTimeDate'] === false} />
                     <Form.Control.Feedback type="invalid">
                       Invalid date
                     </Form.Control.Feedback>
                   </Col>
                   <Col>
-                    <Form.Control type="text" name="finishTimeHour" className="inputTimer" style={{ width: '10ch' }} 
-                        value={formObject.finishTimeHour} 
-                        onChange={onChangeInputs}
-                        pattern={hourFormatRegex} />
-                    <Form.Control.Feedback type="invalid">
-                      Fill a valid hour in format XX:XX
-                    </Form.Control.Feedback>
+                    <Form.Group controlId="validationFieldfinishTimeHour">
+                      <Form.Control type="text" name="finishTimeHour" className="inputTimer" style={{ width: '10ch' }} 
+                          value={formObject.finishTimeHour} 
+                          onChange={onChangeInputs}
+                          pattern={hourFormatRegex}
+                          isInvalid={formValidated['finishTimeHour'] === false} />
+                      <Form.Control.Feedback type="invalid">
+                        Fill a valid hour in format XX:XX
+                      </Form.Control.Feedback>
+                    </Form.Group>
                   </Col>
                 </Row>                
               </Container>
