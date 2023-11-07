@@ -25,7 +25,7 @@ function TasksPage(){
   }, []);
 
   function getTasks(){
-    requestServer('GET', 'http://localhost:3000/task_groups/', (json) => setData(json), (err) => setError(err));
+    requestServer('GET', 'task_groups/', null, (json) => setData(json), (err) => setError(err));
   }
 
 
@@ -117,11 +117,11 @@ function TasksPage(){
   }
 
   function startTimer(idTask){
-    requestServer('POST', "http://localhost:3000/tasks/"+idTask+"/start", (jsonData) => getTasks(), (err) => setError(err));
+    requestServer('POST', "tasks/"+idTask+"/start", null, (jsonData) => getTasks(), (err) => setError(err));
   }
 
   function stopTimer(idTask){
-    requestServer('POST', "http://localhost:3000/tasks/"+idTask+"/stop", (jsonData) => getTasks(), (err) => setError(err));
+    requestServer('POST', "tasks/"+idTask+"/stop", null, (jsonData) => getTasks(), (err) => setError(err));
   }
 
   function selectedTaskToEdit(task){
