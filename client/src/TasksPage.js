@@ -131,6 +131,7 @@ function TasksPage(){
 
   function onCloseModal(){
     setShowModal(false);
+    getTasks();
   }
 
   return (

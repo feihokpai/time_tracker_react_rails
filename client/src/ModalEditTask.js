@@ -5,6 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Container from "react-bootstrap/esm/Container";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import requestServer from './request_server';
 
 function ModalEditTask(props){
   const { task } = props;
@@ -51,6 +52,8 @@ function ModalEditTask(props){
       const finishTimeIsoString = mountIsoString(formObject.finishTimeDate, formObject.finishTimeHour);
       console.log("start Time to send to server: "+startTimeIsoString);
       console.log("finish Time to send to server: "+finishTimeIsoString);
+      const parameters = { start_time: startTimeIsoString, finish_time: finishTimeIsoString };
+      requestServer("POST", "timers/"+task.active_timer_id+"/update", parameters, (json) => onClose(), (err) => handleError(err) );
     }else{
       console.log("No request will be done");
     }
@@ -98,6 +101,10 @@ function ModalEditTask(props){
     setValidated(false);
     setformValidated({ finishTimeHour: null, finishTimeDate: null });
     props.onClose();
+  }
+
+  function handleError(error){
+
   }
 
   return (
