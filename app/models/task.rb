@@ -20,6 +20,7 @@ class Task < ApplicationRecord
     json = as_json(only: [:id, :name, :description])
     json['start_time'] = start_time
     json['duration_today'] = duration_today_as_string
+    json['active_timer_id'] = active_timer&.id
     json
   end
 
