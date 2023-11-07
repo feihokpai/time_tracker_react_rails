@@ -1,4 +1,6 @@
 class TasksController < ApplicationController
+  before_action :load_task
+
   def start_timer
     if task_active?
       render json: { error: "Task with id '#{params[:id]}' is already active" }
@@ -17,8 +19,11 @@ class TasksController < ApplicationController
 
   private
 
-    def task_active?
+    def load_task
       @task = Task.find(params[:id])
+    end
+
+    def task_active?
       @task.start_time.present?
     end
 end
