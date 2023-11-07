@@ -29,8 +29,9 @@ function ModalEditTask(props){
       return;
     }
     let formCopy = { ...formObject };
-    formCopy['startTimeDate'] = task.start_time.slice(0,10);
-    formCopy['startTimeHour'] = task.start_time.slice(11, 16);
+    let startDateTime = new Date(task.start_time);
+    formCopy['startTimeDate'] = startDateTime.getFullYear()+"-"+addZero(startDateTime.getMonth() + 1)+"-"+addZero(startDateTime.getDate());
+    formCopy['startTimeHour'] = addZero(startDateTime.getHours())+":"+addZero(startDateTime.getMinutes());
     if(task.finish_time != null){
       formCopy['finishTimeDate'] = task.finish_time.slice(0,10);
       formCopy['finishTimeHour'] = task.finish_time.slice(11, 16);
@@ -40,6 +41,10 @@ function ModalEditTask(props){
     setFormObject(formCopy);
     setValidated(false);
     setformValidated({ finishTimeHour: null, finishTimeDate: null });
+  }
+
+  function addZero(number){
+    return number.toString().padStart(2, '0');
   }
 
   function onSave(event){
