@@ -30,11 +30,12 @@ function ModalEditTask(props){
     }
     let formCopy = { ...formObject };
     let startDateTime = new Date(task.start_time);
-    formCopy['startTimeDate'] = startDateTime.getFullYear()+"-"+addZero(startDateTime.getMonth() + 1)+"-"+addZero(startDateTime.getDate());
-    formCopy['startTimeHour'] = addZero(startDateTime.getHours())+":"+addZero(startDateTime.getMinutes());
+    formCopy['startTimeDate'] = extractLocaleDate(startDateTime);
+    formCopy['startTimeHour'] = extractLocaleHour(startDateTime);
     if(task.finish_time != null){
-      formCopy['finishTimeDate'] = task.finish_time.slice(0,10);
-      formCopy['finishTimeHour'] = task.finish_time.slice(11, 16);
+      let finishDateTime = new Date(task.finish_time);
+      formCopy['finishTimeDate'] = extractLocaleDate(finishDateTime);
+      formCopy['finishTimeHour'] = extractLocaleHour(finishDateTime);
     }else{
       formCopy['finishTimeDate'] = formCopy['finishTimeHour'] = "";      
     }
@@ -43,8 +44,16 @@ function ModalEditTask(props){
     setformValidated({ finishTimeHour: null, finishTimeDate: null });
   }
 
+  function extractLocaleDate(date){
+    return date.getFullYear()+"-"+addZero(date.getMonth() + 1)+"-"+addZero(date.getDate())
+  }
+
   function addZero(number){
     return number.toString().padStart(2, '0');
+  }
+
+  function extractLocaleHour(date){
+    return addZero(date.getHours())+":"+addZero(date.getMinutes());
   }
 
   function onSave(event){
