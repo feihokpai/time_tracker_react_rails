@@ -43,6 +43,9 @@ function TasksPage(){
   }
 
   function processTasksPanel(){
+    if(selectedTaskGroup == null){
+      setSelectedTaskGroup(data[0].id);
+    }
     return (
       <Container>
         <Row >
