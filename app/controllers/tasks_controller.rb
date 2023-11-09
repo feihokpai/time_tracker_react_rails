@@ -17,6 +17,13 @@ class TasksController < ApplicationController
     render json: { error: "Error trying to stop the task: #{ex.message}" }
   end
 
+  def update
+    @task.update!(name: params['name'], description: params['description'])
+    render json: { message: "Task edited" }
+  rescue StandardError => ex
+    render json: { error: "Error trying to edit the task: #{ex.message}" }
+  end
+
   private
 
     def load_task
