@@ -14,7 +14,7 @@ function TasksPage(){
   const [selectedTaskGroup, setSelectedTaskGroup] = useState(null);
   const [intervalId, setIntervalId] = useState(null);
   const [lastTime, setLastTime] = useState(null);
-  const [showModal, setShowModal] = useState(false);
+  const [showModalCurrentTimer, setShowModalCurrentTimer] = useState(false);
   const [taskToEdit, setTaskToEdit] = useState(null);
 
   useEffect( () => { 
@@ -87,7 +87,7 @@ function TasksPage(){
                 <Col xs={8}>
                   <input type="text" className="inputTimer" style={{ width: '8ch' }} readOnly title="Click to edit timer"
                       value={calculateDuration(task)}
-                      onClick={ () => selectedTaskToEdit(task) } />
+                      onClick={ () => editCurrentTimer(task) } />
                 </Col>
                 <Col xs={4}><CloseButton title="Stop timer" onClick={ () => stopTimer(task.id) }/></Col>
                </Row>
@@ -124,7 +124,16 @@ function TasksPage(){
     requestServer('POST', "tasks/"+idTask+"/stop", null, (jsonData) => getTasks(), (err) => setError(err));
   }
 
-  function selectedTaskToEdit(task){
+  function editCurrentTimer(task){
+    setTaskToEdit(task);
+    setShowModalCurrentTimer(true);
+  }
+
+  function onCloseModalCurrentTimer(){
+    setShowModalCurrentTimer(false);
+    getTasks();
+  }
+
     setTaskToEdit(task);
     setShowModal(true);
   }
@@ -142,8 +151,8 @@ function TasksPage(){
         <div>
           <h2>Tasks</h2>
           {processTasksPanel()}
-          <ModalEditTaskCurrentTimer show={showModal} task={taskToEdit}
-              onClose={() => onCloseModal()} />
+          <ModalEditTaskCurrentTimer show={showModalCurrentTimer} task={taskToEdit}
+              onClose={() => onCloseModalCurrentTimer()} />
         </div>
       )}
     </div>
