@@ -5,6 +5,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import CloseButton from 'react-bootstrap/CloseButton';
 import ModalEditTaskCurrentTimer from './ModalEditTaskCurrentTimer';
+import ModalEditTaskDetails from './ModalEditTaskDetails'
 import requestServer from "./request_server";
 import './css/TasksPage.css'
 
@@ -15,6 +16,7 @@ function TasksPage(){
   const [intervalId, setIntervalId] = useState(null);
   const [lastTime, setLastTime] = useState(null);
   const [showModalCurrentTimer, setShowModalCurrentTimer] = useState(false);
+  const [showModalDetails, setShowModalDetails] = useState(false);
   const [taskToEdit, setTaskToEdit] = useState(null);
 
   useEffect( () => { 
@@ -81,7 +83,16 @@ function TasksPage(){
             { task.duration_today != null && "("+task.duration_today+")" }
           </Container>
           <Container xs={2}>          
-            { task.start_time == null && ( <Button onClick={ () => startTimer(task.id) } title="Start timer">Start</Button> ) }
+            { task.start_time == null && 
+              ( 
+                <Row>
+                  <Col xs={8}><Button onClick={ () => startTimer(task.id) } title="Start timer">Start</Button></Col>
+                  <Col xs={4}>
+                    <div><i className="bi bi-pencil" onClick={ () => editTaskDetails(task) } title="Edit task details"></i></div>
+                  </Col>
+                </Row>
+              ) 
+            }
             { task.start_time != null && 
               (<Row>
                 <Col xs={8}>
@@ -134,12 +145,13 @@ function TasksPage(){
     getTasks();
   }
 
+  function editTaskDetails(task){
     setTaskToEdit(task);
-    setShowModal(true);
+    setShowModalDetails(true);
   }
 
-  function onCloseModal(){
-    setShowModal(false);
+  function onCloseModalDetails(){
+    setShowModalDetails(false);
     getTasks();
   }
 
@@ -153,6 +165,8 @@ function TasksPage(){
           {processTasksPanel()}
           <ModalEditTaskCurrentTimer show={showModalCurrentTimer} task={taskToEdit}
               onClose={() => onCloseModalCurrentTimer()} />
+          <ModalEditTaskDetails show={showModalDetails} task={taskToEdit}
+              onClose={() => onCloseModalDetails()} />
         </div>
       )}
     </div>
