@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import CloseButton from 'react-bootstrap/CloseButton';
-import ModalEditTask from './ModalEditTask';
+import ModalEditTaskCurrentTimer from './ModalEditTaskCurrentTimer';
 import requestServer from "./request_server";
 import './css/TasksPage.css'
 
@@ -142,7 +142,7 @@ function TasksPage(){
         <div>
           <h2>Tasks</h2>
           {processTasksPanel()}
-          <ModalEditTask show={showModal} task={taskToEdit}
+          <ModalEditTaskCurrentTimer show={showModal} task={taskToEdit}
               onClose={() => onCloseModal()} />
         </div>
       )}

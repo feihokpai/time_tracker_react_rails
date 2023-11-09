@@ -7,7 +7,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import requestServer from './request_server';
 
-function ModalEditTask(props){
+function ModalEditTaskCurrentTimer(props){
   const { task } = props;
   const [validated, setValidated] = useState(false);
   const [formObject, setFormObject] = useState({ startTimeHour: "", startTimeDate: "", finishTimeHour: "", finishTimeDate: "" });
@@ -194,4 +194,4 @@ function ModalEditTask(props){
   );  
 }
 
-export default ModalEditTask;
+export default ModalEditTaskCurrentTimer;
