@@ -124,7 +124,7 @@ function ModalEditTask(props){
   return (
     <Modal show={props.show} onHide={onClose}>
       <Modal.Header closeButton>
-        <Modal.Title>{ props.task != null && "Editing task '"+props.task.name+"'"}</Modal.Title>
+        <Modal.Title>{ props.task != null && "Editing timer from task '"+props.task.name+"'"}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {
