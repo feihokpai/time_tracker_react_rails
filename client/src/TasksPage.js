@@ -117,7 +117,7 @@ function TasksPage(){
                 <Row>
                   <Col xs={8}><Button onClick={ () => startTimer(task.id) } title="Start timer">Start</Button></Col>
                   <Col xs={4}>
-                    <div><i className="bi bi-pencil" onClick={ () => editTaskDetails(task) } title="Edit task details"></i></div>
+                    <div><i className="bi bi-pencil pointer-icon" onClick={ () => editTaskDetails(task) } title="Edit task details"></i></div>
                   </Col>
                 </Row>
               ) 
