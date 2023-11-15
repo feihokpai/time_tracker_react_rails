@@ -1,3 +1,5 @@
+@import '~bootstrap-icons/font/bootstrap-icons.css';
+
 .taskGroup {
   background-color: #282c34;
   color: white;  
@@ -18,4 +20,16 @@
 
 .inputTimer {
   padding-left: 0px;
+}
+
+.floating-label {
+  font-size: 14px;
+}
+
+.error-message {
+  background-color: red;
+}
+
+.pointer-icon {
+  cursor: pointer;
 }

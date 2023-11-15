@@ -5,6 +5,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import CloseButton from 'react-bootstrap/CloseButton';
 import ModalEditTaskCurrentTimer from './ModalEditTaskCurrentTimer';
+import ModalEditTaskDetails from './ModalEditTaskDetails'
 import requestServer from "./request_server";
 import './css/TasksPage.css'
 
@@ -14,8 +15,10 @@ function TasksPage(){
   const [selectedTaskGroup, setSelectedTaskGroup] = useState(null);
   const [intervalId, setIntervalId] = useState(null);
   const [lastTime, setLastTime] = useState(null);
-  const [showModal, setShowModal] = useState(false);
+  const [showModalCurrentTimer, setShowModalCurrentTimer] = useState(false);
+  const [showModalDetails, setShowModalDetails] = useState(false);
   const [taskToEdit, setTaskToEdit] = useState(null);
+  const ERROR_SHOW_TIMEOUT = 7000;
 
   useEffect( () => { 
     getTasks();
@@ -25,9 +28,19 @@ function TasksPage(){
   }, []);
 
   function getTasks(){
-    requestServer('GET', 'task_groups/', null, (json) => setData(json), (err) => setError(err));
+    console.log("No Errorr on requesting: "+JSON.stringify(data));
+    requestServer('GET', 'task_groups/', null, (json) => setData(json), (err) => handleError(err));
   }
 
+  function handleResponse(json){
+    json.status === 500 ? handleError(json) : setData(json);
+  }
+
+  function handleError(json){
+    setError(json.message);
+    console.log("Unexpected answer from server: "+JSON.stringify(json));
+    setTimeout( () => setError(null), ERROR_SHOW_TIMEOUT);
+  }
 
   function startInterval(){
     let id = setInterval( () => { setLastTime(new Date()); }, 1000);
@@ -41,8 +54,26 @@ function TasksPage(){
   }
 
   function processTasksPanel(){
+    if(selectedTaskGroup == null){
+      if(data[0] != null){
+        setSelectedTaskGroup(data[0].id);
+      }
+    }
     return (
       <Container>
+        { //error !== null &&
+          <Row >
+            <Col xs={7}>
+              { error !== null &&
+              <p className="error-message">
+                {error}
+                <CloseButton onClick={ () => setError(null) } />
+              </p>              
+              }
+            </Col>
+            <Col></Col>
+          </Row>        
+        }
         <Row >
           <Col xs={7}>
             {data.map(processTaskGroups)}
@@ -81,13 +112,22 @@ function TasksPage(){
             { task.duration_today != null && "("+task.duration_today+")" }
           </Container>
           <Container xs={2}>          
-            { task.start_time == null && ( <Button onClick={ () => startTimer(task.id) } title="Start timer">Start</Button> ) }
+            { task.start_time == null && 
+              ( 
+                <Row>
+                  <Col xs={8}><Button onClick={ () => startTimer(task.id) } title="Start timer">Start</Button></Col>
+                  <Col xs={4}>
+                    <div><i className="bi bi-pencil pointer-icon" onClick={ () => editTaskDetails(task) } title="Edit task details"></i></div>
+                  </Col>
+                </Row>
+              ) 
+            }
             { task.start_time != null && 
               (<Row>
                 <Col xs={8}>
                   <input type="text" className="inputTimer" style={{ width: '8ch' }} readOnly title="Click to edit timer"
                       value={calculateDuration(task)}
-                      onClick={ () => selectedTaskToEdit(task) } />
+                      onClick={ () => editCurrentTimer(task) } />
                 </Col>
                 <Col xs={4}><CloseButton title="Stop timer" onClick={ () => stopTimer(task.id) }/></Col>
                </Row>
@@ -117,33 +157,44 @@ function TasksPage(){
   }
 
   function startTimer(idTask){
-    requestServer('POST', "tasks/"+idTask+"/start", null, (jsonData) => getTasks(), (err) => setError(err));
+    requestServer('POST', "tasks/"+idTask+"/start", null, (jsonData) => handleResponse(jsonData), (err) => setError(err));
   }
 
   function stopTimer(idTask){
-    requestServer('POST', "tasks/"+idTask+"/stop", null, (jsonData) => getTasks(), (err) => setError(err));
+    requestServer('POST', "tasks/"+idTask+"/stop", null, (jsonData) => handleResponse(jsonData), (err) => setError(err));
   }
 
-  function selectedTaskToEdit(task){
+  function editCurrentTimer(task){
     setTaskToEdit(task);
-    setShowModal(true);
+    setShowModalCurrentTimer(true);
   }
 
-  function onCloseModal(){
-    setShowModal(false);
+  function onCloseModalCurrentTimer(){
+    setShowModalCurrentTimer(false);
+    getTasks();
+  }
+
+  function editTaskDetails(task){
+    setTaskToEdit(task);
+    setShowModalDetails(true);
+  }
+
+  function onCloseModalDetails(){
+    setShowModalDetails(false);
     getTasks();
   }
 
   return (
     <div>
       <h1>React App</h1>
-      {error && <p>Error: {error.message}</p>}
       {data && (
         <div>
           <h2>Tasks</h2>
           {processTasksPanel()}
-          <ModalEditTaskCurrentTimer show={showModal} task={taskToEdit}
-              onClose={() => onCloseModal()} />
+          <ModalEditTaskCurrentTimer show={showModalCurrentTimer} task={taskToEdit}
+              onClose={() => onCloseModalCurrentTimer()} />
+          <ModalEditTaskDetails show={showModalDetails} task={taskToEdit}
+              onClose={() => onCloseModalDetails()} />
         </div>
       )}
     </div>

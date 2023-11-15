@@ -11,6 +11,7 @@ function requestServer(httpMethod, url, parameters, callback, callbackError){
   fetch(completeUrl, fetchParameters)
     .then((response) => {
       if (!response.ok) {
+        console.log("Error on requesting server: "+JSON.stringify(response));
         throw new Error('Network response was not ok');
       }
       return response.json();        
