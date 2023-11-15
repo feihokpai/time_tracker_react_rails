@@ -8,6 +8,8 @@ class TasksController < ApplicationController
       time_register = TimeRegister.create!(task: @task, start_time: Time.current)
       render json: { start_time: time_register.start_time }
     end
+  rescue StandardError => ex
+    render json: { status: 500, message: ex.message }
   end
 
   def stop_timer
