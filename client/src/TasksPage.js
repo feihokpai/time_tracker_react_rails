@@ -18,6 +18,7 @@ function TasksPage(){
   const [showModalCurrentTimer, setShowModalCurrentTimer] = useState(false);
   const [showModalDetails, setShowModalDetails] = useState(false);
   const [taskToEdit, setTaskToEdit] = useState(null);
+  const ERROR_SHOW_TIMEOUT = 7000;
 
   useEffect( () => { 
     getTasks();
@@ -27,9 +28,19 @@ function TasksPage(){
   }, []);
 
   function getTasks(){
-    requestServer('GET', 'task_groups/', null, (json) => setData(json), (err) => setError(err));
+    console.log("No Errorr on requesting: "+JSON.stringify(data));
+    requestServer('GET', 'task_groups/', null, (json) => setData(json), (err) => handleError(err));
   }
 
+  function handleResponse(json){
+    json.status === 500 ? handleError(json) : setData(json);
+  }
+
+  function handleError(json){
+    setError(json.message);
+    console.log("Unexpected answer from server: "+JSON.stringify(json));
+    setTimeout( () => setError(null), ERROR_SHOW_TIMEOUT);
+  }
 
   function startInterval(){
     let id = setInterval( () => { setLastTime(new Date()); }, 1000);
@@ -50,6 +61,19 @@ function TasksPage(){
     }
     return (
       <Container>
+        { //error !== null &&
+          <Row >
+            <Col xs={7}>
+              { error !== null &&
+              <p className="error-message">
+                {error}
+                <CloseButton onClick={ () => setError(null) } />
+              </p>              
+              }
+            </Col>
+            <Col></Col>
+          </Row>        
+        }
         <Row >
           <Col xs={7}>
             {data.map(processTaskGroups)}
@@ -133,11 +157,11 @@ function TasksPage(){
   }
 
   function startTimer(idTask){
-    requestServer('POST', "tasks/"+idTask+"/start", null, (jsonData) => getTasks(), (err) => setError(err));
+    requestServer('POST', "tasks/"+idTask+"/start", null, (jsonData) => handleResponse(jsonData), (err) => setError(err));
   }
 
   function stopTimer(idTask){
-    requestServer('POST', "tasks/"+idTask+"/stop", null, (jsonData) => getTasks(), (err) => setError(err));
+    requestServer('POST', "tasks/"+idTask+"/stop", null, (jsonData) => handleResponse(jsonData), (err) => setError(err));
   }
 
   function editCurrentTimer(task){
@@ -163,7 +187,6 @@ function TasksPage(){
   return (
     <div>
       <h1>React App</h1>
-      {error && <p>Error: {error.message}</p>}
       {data && (
         <div>
           <h2>Tasks</h2>
