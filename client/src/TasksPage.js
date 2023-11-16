@@ -33,7 +33,7 @@ function TasksPage(){
   }
 
   function handleResponse(json){
-    json.status === 500 ? handleError(json) : setData(json);
+    json.status == 500 ? handleError(json) : getTasks();
   }
 
   function handleError(json){
@@ -76,7 +76,7 @@ function TasksPage(){
         }
         <Row >
           <Col xs={7}>
-            {data.map(processTaskGroups)}
+            {data !== null && data.map(processTaskGroups)}
           </Col>
           <Col></Col>
         </Row>        
