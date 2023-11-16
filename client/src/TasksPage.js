@@ -91,7 +91,9 @@ function TasksPage(){
           <Col className="taskGroup">
           <Container>
             <Row>
-              <Col xs={1}><div><i className="bi bi-plus-circle pointer-icon" title="Create a new task"></i></div></Col>
+              <Col xs={1} className="column-add-task-icon">
+                <div><i className="bi bi-plus-circle pointer-icon" title="Create a new task"></i></div>
+              </Col>
               <Col>{taskGroup.name}</Col>
             </Row>
           </Container>
