@@ -89,7 +89,14 @@ function TasksPage(){
       <Container key={index} className="mb-3" onClick={() => setSelectedTaskGroup(taskGroup.id)}>
         <Row >
           <Col className="taskGroup">
-            {taskGroup.name}        
+          <Container>
+            <Row>
+              <Col xs={1}><div><i className="bi bi-plus-circle pointer-icon" title="Create a new task"></i></div></Col>
+              <Col>{taskGroup.name}</Col>
+            </Row>
+          </Container>
+            
+            
           </Col>
           <Col className="taskGroup" xs={2}>
             { taskGroup.id === selectedTaskGroup && "Spent today" }
