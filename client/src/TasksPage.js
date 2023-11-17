@@ -28,7 +28,6 @@ function TasksPage(){
   }, []);
 
   function getTasks(){
-    console.log("No Errorr on requesting: "+JSON.stringify(data));
     requestServer('GET', 'task_groups/', null, (json) => setData(json), (err) => handleError(err));
   }
 
@@ -91,7 +90,7 @@ function TasksPage(){
           <Col className="taskGroup">
           <Container>
             <Row>
-              <Col xs={1} className="column-add-task-icon">
+              <Col xs={1} className="column-add-task-icon" onClick={ () => openModalToCreateTask(taskGroup.id) }>
                 <div><i className="bi bi-plus-circle pointer-icon" title="Create a new task"></i></div>
               </Col>
               <Col>{taskGroup.name}</Col>
@@ -110,6 +109,12 @@ function TasksPage(){
         {taskGroup.id === selectedTaskGroup && taskGroup.tasks.map(processTask)}
       </Container>
     );
+  }
+
+  function openModalToCreateTask(idTaskGroup){
+    setSelectedTaskGroup(idTaskGroup);
+    setTaskToEdit(null);
+    setShowModalDetails(true);
   }
 
   function processTask(task, index){
@@ -202,8 +207,12 @@ function TasksPage(){
           {processTasksPanel()}
           <ModalEditTaskCurrentTimer show={showModalCurrentTimer} task={taskToEdit}
               onClose={() => onCloseModalCurrentTimer()} />
-          <ModalEditTaskDetails show={showModalDetails} task={taskToEdit}
-              onClose={() => onCloseModalDetails()} />
+          <ModalEditTaskDetails show={showModalDetails} 
+              task={taskToEdit}
+              taskGroups={data}
+              taskGroupSelected={selectedTaskGroup}
+              onClose={ () => onCloseModalDetails() }
+              onError={ (json) => handleResponse(json) } />
         </div>
       )}
     </div>
