@@ -20,7 +20,7 @@ class TasksController < ApplicationController
   end
 
   def update
-    @task.update!(name: params['name'], description: params['description'])
+    @task.update!(name: params['name'], description: params['description'], task_group_id: params['task_group_id'])
     render json: { message: "Task edited" }
   rescue StandardError => ex
     render json: { error: "Error trying to edit the task: #{ex.message}" }
@@ -29,7 +29,7 @@ class TasksController < ApplicationController
   private
 
     def load_task
-      @task = Task.find(params[:id])
+      @task = Task.find(params[:id]) if params[:id].present?
     end
 
     def task_active?
