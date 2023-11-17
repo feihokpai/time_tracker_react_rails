@@ -1,6 +1,14 @@
 class TasksController < ApplicationController
   before_action :load_task
 
+  def create
+    Task.create!(task_group_id: params['task_group_id'], name: params['name'], description: params['description'])
+    render json: { status: 200, message: "Task created successfully" }
+  rescue StandardError => ex
+    puts "error: #{ex.message}"
+    render json: { status: 500, message: ex.message }
+  end
+
   def start_timer
     if task_active?
       render json: { error: "Task with id '#{params[:id]}' is already active" }
