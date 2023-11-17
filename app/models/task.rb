@@ -21,6 +21,7 @@ class Task < ApplicationRecord
     json['start_time'] = start_time
     json['duration_today'] = duration_today_as_string
     json['active_timer_id'] = active_timer&.id
+    json['task_group_id'] = task_group_id
     json
   end
 
