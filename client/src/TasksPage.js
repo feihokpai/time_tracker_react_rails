@@ -55,7 +55,7 @@ function TasksPage(){
   function processTasksPanel(){
     if(selectedTaskGroup == null){
       if(data[0] != null){
-        setSelectedTaskGroup(data[0].id);
+        setSelectedTaskGroup(data[0]);
       }
     }
     return (
@@ -85,7 +85,7 @@ function TasksPage(){
 
   function processTaskGroups(taskGroup, index){
     return (
-      <Container key={index} className="mb-3" onClick={() => setSelectedTaskGroup(taskGroup.id)}>
+      <Container key={index} className="mb-3" onClick={ () => setSelectedTaskGroup(taskGroup) }>
         <Row >
           <Col className="taskGroup">
           <Container>
@@ -111,8 +111,8 @@ function TasksPage(){
     );
   }
 
-  function openModalToCreateTask(idTaskGroup){
-    setSelectedTaskGroup(idTaskGroup);
+  function openModalToCreateTask(taskGroup){
+    setSelectedTaskGroup(taskGroup);
     setTaskToEdit(null);
     setShowModalDetails(true);
   }
