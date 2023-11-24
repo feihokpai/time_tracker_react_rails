@@ -111,7 +111,7 @@ function TasksPage(){
                   <div><i className="bi bi-plus-circle pointer-icon" title="Create a new task"></i></div>
                 </Col>
                 <Col>
-                  <TaskGroupEditableName taskGroup={taskGroup} editionEnabled={editingTaskGroup} onClickName={ () => setEditingTaskGroup(true) } />
+                  <TaskGroupEditableName taskGroup={taskGroup} editionEnabled={editingTaskGroup && taskGroupSelected(taskGroup)} onClickName={ () => setEditingTaskGroup(true) } />
                 </Col>
               </Row>
             </Container>
