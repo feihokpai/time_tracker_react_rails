@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -8,6 +8,12 @@ import './css/TaskGroupEditableName.css';
 function TaskGroupEditableName(props){
   const [isEditing, setIsEditing] = useState(false);
   const [newName, setNewName] = useState(null);
+
+  useEffect( () => {
+    if(!props.editionEnabled){
+      setIsEditing(false);
+    }
+  }, [props.editionEnabled]);
 
   function onChangeName(event){
     setNewName(event.target.value);
