@@ -116,13 +116,13 @@ function TasksPage(){
             
           </Col>
           <Col className="taskGroup" xs={2}>
-            { taskGroup.id === selectedTaskGroup && "Spent today" }
+            { taskGroupSelected(taskGroup) && "Spent today" }
           </Col>
           <Col className="taskGroup" xs={2}>
-            { taskGroup.id === selectedTaskGroup && "Commands" }
+            { taskGroupSelected(taskGroup) && "Commands" }
           </Col>          
         </Row>
-        {taskGroup.id === selectedTaskGroup && taskGroup.tasks.map(processTask)}
+        { taskGroupSelected(taskGroup) && taskGroup.tasks.map(processTask) }
       </Container>
     );
   }
