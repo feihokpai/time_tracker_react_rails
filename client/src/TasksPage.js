@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -13,11 +13,13 @@ function TasksPage(){
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [selectedTaskGroup, setSelectedTaskGroup] = useState(null);
+  const [editingTaskGroup, setEditingTaskGroup] = useState(false);
   const [intervalId, setIntervalId] = useState(null);
   const [lastTime, setLastTime] = useState(null);
   const [showModalCurrentTimer, setShowModalCurrentTimer] = useState(false);
   const [showModalDetails, setShowModalDetails] = useState(false);
   const [taskToEdit, setTaskToEdit] = useState(null);
+  const selectedTaskGroupDiv = useRef(null);
   const ERROR_SHOW_TIMEOUT = 7000;
 
   useEffect( () => { 
@@ -26,6 +28,19 @@ function TasksPage(){
     // Clean up the interval when the component unmounts
     return () => { clearCurrentInterval(); }; 
   }, []);
+
+  useEffect( () => { 
+    document.addEventListener('click', handleClickOutside);
+
+    return () => document.removeEventListener('click', handleClickOutside); 
+  }, [selectedTaskGroup]);
+
+  function handleClickOutside(event){
+    let clickedOutSideDiv = (selectedTaskGroupDiv && !selectedTaskGroupDiv.current.contains(event.target));
+    if (clickedOutSideDiv) {
+      setEditingTaskGroup(false);
+    }
+  }
 
   function getTasks(){
     requestServer('GET', 'task_groups/', null, (json) => setData(json), (err) => handleError(err));
@@ -85,7 +100,8 @@ function TasksPage(){
 
   function processTaskGroups(taskGroup, index){
     return (
-      <Container key={index} className="mb-3" onClick={ () => setSelectedTaskGroup(taskGroup) }>
+      <Container key={index} className="mb-3" onClick={ () => setSelectedTaskGroup(taskGroup) } 
+          ref={ taskGroupSelected(taskGroup) ? selectedTaskGroupDiv : null }>
         <Row >
           <Col className="taskGroup">
           <Container>
@@ -109,6 +125,10 @@ function TasksPage(){
         {taskGroup.id === selectedTaskGroup && taskGroup.tasks.map(processTask)}
       </Container>
     );
+  }
+
+  function taskGroupSelected(taskGroup){
+    return selectedTaskGroup !== null && taskGroup.id === selectedTaskGroup.id
   }
 
   function openModalToCreateTask(taskGroup){
