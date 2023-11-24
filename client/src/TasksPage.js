@@ -8,6 +8,7 @@ import ModalEditTaskCurrentTimer from './ModalEditTaskCurrentTimer';
 import ModalEditTaskDetails from './ModalEditTaskDetails'
 import requestServer from "./request_server";
 import './css/TasksPage.css'
+import TaskGroupEditableName from "./TaskGroupEditableName";
 
 function TasksPage(){
   const [data, setData] = useState(null);
@@ -104,16 +105,16 @@ function TasksPage(){
           ref={ taskGroupSelected(taskGroup) ? selectedTaskGroupDiv : null }>
         <Row >
           <Col className="taskGroup">
-          <Container>
-            <Row>
-              <Col xs={1} className="column-add-task-icon" onClick={ () => openModalToCreateTask(taskGroup.id) }>
-                <div><i className="bi bi-plus-circle pointer-icon" title="Create a new task"></i></div>
-              </Col>
-              <Col>{taskGroup.name}</Col>
-            </Row>
-          </Container>
-            
-            
+            <Container>
+              <Row>
+                <Col xs={1} className="column-add-task-icon" onClick={ () => openModalToCreateTask(taskGroup) }>
+                  <div><i className="bi bi-plus-circle pointer-icon" title="Create a new task"></i></div>
+                </Col>
+                <Col>
+                  <TaskGroupEditableName taskGroup={taskGroup} editionEnabled={editingTaskGroup} onClickName={ () => setEditingTaskGroup(true) } />
+                </Col>
+              </Row>
+            </Container>
           </Col>
           <Col className="taskGroup" xs={2}>
             { taskGroupSelected(taskGroup) && "Spent today" }
