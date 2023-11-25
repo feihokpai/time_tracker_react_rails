@@ -101,7 +101,7 @@ function TasksPage(){
 
   function processTaskGroups(taskGroup, index){
     return (
-      <Container key={index} className="mb-3" onClick={ () => setSelectedTaskGroup(taskGroup) } 
+      <Container key={index} className="mb-3" onClick={ () => clickedTaskGroupDiv(taskGroup) } 
           ref={ taskGroupSelected(taskGroup) ? selectedTaskGroupDiv : null }>
         <Row >
           <Col className="taskGroup">
@@ -111,7 +111,9 @@ function TasksPage(){
                   <div><i className="bi bi-plus-circle pointer-icon" title="Create a new task"></i></div>
                 </Col>
                 <Col>
-                  <TaskGroupEditableName taskGroup={taskGroup} editionEnabled={editingTaskGroup && taskGroupSelected(taskGroup)} onClickName={ () => setEditingTaskGroup(true) } />
+                  <TaskGroupEditableName taskGroup={taskGroup} 
+                      editionEnabled={editingTaskGroup && taskGroupSelected(taskGroup)} 
+                      onClickName={ () => { taskGroupSelected(taskGroup) && setEditingTaskGroup(true) } } />
                 </Col>
               </Row>
             </Container>
@@ -126,6 +128,13 @@ function TasksPage(){
         { taskGroupSelected(taskGroup) && taskGroup.tasks.map(processTask) }
       </Container>
     );
+  }
+
+  function clickedTaskGroupDiv(taskGroup){
+    if(selectedTaskGroup && taskGroup.id != selectedTaskGroup.id){
+      setEditingTaskGroup(false);
+    }
+    setSelectedTaskGroup(taskGroup);
   }
 
   function taskGroupSelected(taskGroup){
