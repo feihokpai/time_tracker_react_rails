@@ -113,7 +113,9 @@ function TasksPage(){
                 <Col>
                   <TaskGroupEditableName taskGroup={taskGroup} 
                       editionEnabled={editingTaskGroup && taskGroupSelected(taskGroup)} 
-                      onClickName={ () => { taskGroupSelected(taskGroup) && setEditingTaskGroup(true) } } />
+                      onClickName={ () => { taskGroupSelected(taskGroup) && setEditingTaskGroup(true) } }
+                      handleError={handleError}
+                      afterSave={handleResponse} />
                 </Col>
               </Row>
             </Container>
