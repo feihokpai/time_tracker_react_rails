@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -8,16 +8,19 @@ import ModalEditTaskCurrentTimer from './ModalEditTaskCurrentTimer';
 import ModalEditTaskDetails from './ModalEditTaskDetails'
 import requestServer from "./request_server";
 import './css/TasksPage.css'
+import TaskGroupEditableName from "./TaskGroupEditableName";
 
 function TasksPage(){
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [selectedTaskGroup, setSelectedTaskGroup] = useState(null);
+  const [editingTaskGroup, setEditingTaskGroup] = useState(false);
   const [intervalId, setIntervalId] = useState(null);
   const [lastTime, setLastTime] = useState(null);
   const [showModalCurrentTimer, setShowModalCurrentTimer] = useState(false);
   const [showModalDetails, setShowModalDetails] = useState(false);
   const [taskToEdit, setTaskToEdit] = useState(null);
+  const selectedTaskGroupDiv = useRef(null);
   const ERROR_SHOW_TIMEOUT = 7000;
 
   useEffect( () => { 
@@ -26,6 +29,19 @@ function TasksPage(){
     // Clean up the interval when the component unmounts
     return () => { clearCurrentInterval(); }; 
   }, []);
+
+  useEffect( () => { 
+    document.addEventListener('click', handleClickOutside);
+
+    return () => document.removeEventListener('click', handleClickOutside); 
+  }, [selectedTaskGroup]);
+
+  function handleClickOutside(event){
+    let clickedOutSideDiv = (selectedTaskGroupDiv && !selectedTaskGroupDiv.current.contains(event.target));
+    if (clickedOutSideDiv) {
+      setEditingTaskGroup(false);
+    }
+  }
 
   function getTasks(){
     requestServer('GET', 'task_groups/', null, (json) => setData(json), (err) => handleError(err));
@@ -55,7 +71,7 @@ function TasksPage(){
   function processTasksPanel(){
     if(selectedTaskGroup == null){
       if(data[0] != null){
-        setSelectedTaskGroup(data[0].id);
+        setSelectedTaskGroup(data[0]);
       }
     }
     return (
@@ -85,34 +101,50 @@ function TasksPage(){
 
   function processTaskGroups(taskGroup, index){
     return (
-      <Container key={index} className="mb-3" onClick={() => setSelectedTaskGroup(taskGroup.id)}>
+      <Container key={index} className="mb-3" onClick={ () => clickedTaskGroupDiv(taskGroup) } 
+          ref={ taskGroupSelected(taskGroup) ? selectedTaskGroupDiv : null }>
         <Row >
           <Col className="taskGroup">
-          <Container>
-            <Row>
-              <Col xs={1} className="column-add-task-icon" onClick={ () => openModalToCreateTask(taskGroup.id) }>
-                <div><i className="bi bi-plus-circle pointer-icon" title="Create a new task"></i></div>
-              </Col>
-              <Col>{taskGroup.name}</Col>
-            </Row>
-          </Container>
-            
-            
+            <Container>
+              <Row>
+                <Col xs={1} className="column-add-task-icon" onClick={ () => openModalToCreateTask(taskGroup) }>
+                  <div><i className="bi bi-plus-circle pointer-icon" title="Create a new task"></i></div>
+                </Col>
+                <Col>
+                  <TaskGroupEditableName taskGroup={taskGroup} 
+                      editionEnabled={editingTaskGroup && taskGroupSelected(taskGroup)} 
+                      onClickName={ () => { taskGroupSelected(taskGroup) && setEditingTaskGroup(true) } }
+                      handleError={handleError}
+                      afterSave={handleResponse} />
+                </Col>
+              </Row>
+            </Container>
           </Col>
           <Col className="taskGroup" xs={2}>
-            { taskGroup.id === selectedTaskGroup && "Spent today" }
+            { taskGroupSelected(taskGroup) && "Spent today" }
           </Col>
           <Col className="taskGroup" xs={2}>
-            { taskGroup.id === selectedTaskGroup && "Commands" }
+            { taskGroupSelected(taskGroup) && "Commands" }
           </Col>          
         </Row>
-        {taskGroup.id === selectedTaskGroup && taskGroup.tasks.map(processTask)}
+        { taskGroupSelected(taskGroup) && taskGroup.tasks.map(processTask) }
       </Container>
     );
   }
 
-  function openModalToCreateTask(idTaskGroup){
-    setSelectedTaskGroup(idTaskGroup);
+  function clickedTaskGroupDiv(taskGroup){
+    if(selectedTaskGroup && taskGroup.id != selectedTaskGroup.id){
+      setEditingTaskGroup(false);
+    }
+    setSelectedTaskGroup(taskGroup);
+  }
+
+  function taskGroupSelected(taskGroup){
+    return selectedTaskGroup !== null && taskGroup.id === selectedTaskGroup.id
+  }
+
+  function openModalToCreateTask(taskGroup){
+    setSelectedTaskGroup(taskGroup);
     setTaskToEdit(null);
     setShowModalDetails(true);
   }
