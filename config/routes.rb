@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :users, only: [:new, :create, :edit, :update]
 
   get "/task_groups", to: "task_groups#index"
+  post "/task_groups/:id/update", to: "task_groups#update"
   post "/tasks/:id/start", to: "tasks#start_timer"
   post "/tasks/:id/stop", to: "tasks#stop_timer"
   post "/tasks/:id/update", to: "tasks#update"
