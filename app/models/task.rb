@@ -10,6 +10,7 @@ require 'time_utilities'
 #  task_group_id :bigint           not null
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
+#  order         :integer          default(1)
 #
 class Task < ApplicationRecord
   belongs_to :task_group
