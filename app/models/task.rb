@@ -17,6 +17,8 @@ class Task < ApplicationRecord
   delegate :user, to: :task_group
   has_many :time_registers
 
+  before_create :update_orders_in_same_task_group
+
   def json_version
     json = as_json(only: [:id, :name, :description])
     json['start_time'] = start_time
@@ -52,4 +54,14 @@ class Task < ApplicationRecord
     registers = time_registers.finished.where("Date(finish_time) = ?", timestamp.to_date)
     registers.sum(&:duration_in_seconds)
   end
+
+  def increment_order
+    update!(order: (order + 1))
+  end
+
+  private
+
+    def update_orders_in_same_task_group
+      task_group.add_one_to_task_orders
+    end
 end

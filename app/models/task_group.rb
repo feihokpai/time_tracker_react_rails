@@ -18,6 +18,10 @@ class TaskGroup < ApplicationRecord
     main_hash
   end
 
+  def add_one_to_task_orders
+    tasks.each(:increment_order)
+  end
+
   def ordered_tasks
     tasks.order(:order)
   end
