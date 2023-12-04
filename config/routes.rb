@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   post "/tasks/:id/stop", to: "tasks#stop_timer"
   post "/tasks/:id/update", to: "tasks#update"
   post "/tasks/create", to: "tasks#create"
+  post "/tasks/:id/move", to: "tasks#move_order"
   post "/timers/:id/update", to: "time_registers#update"
 
   root to: "home#index"

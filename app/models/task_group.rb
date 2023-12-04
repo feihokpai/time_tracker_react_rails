@@ -23,6 +23,28 @@ class TaskGroup < ApplicationRecord
     target_tasks = target_tasks.reject { |task| task.id == except.id } if except.present?
     tasks.each(&:increment_order)
   end
+
+  def move_up_order(task)
+    current_position = ordered_tasks.index(task)
+    return if current_position.nil?
+    return if current_position == 0
+
+    previous_task = ordered_tasks[current_position - 1]
+    previous_task_order = previous_task.order
+    previous_task.update!(order: task.order)
+    task.update!(order: previous_task_order)
+  end
+
+  def move_down_order(task)
+    current_position = ordered_tasks.index(task)
+    return if current_position.nil?
+    last_index = tasks.size - 1
+    return if current_position == last_index
+
+    next_task = ordered_tasks[current_position + 1]
+    next_task_order = next_task.order
+    next_task.update!(order: task.order)
+    task.update!(order: next_task_order)
   end
 
   def ordered_tasks
