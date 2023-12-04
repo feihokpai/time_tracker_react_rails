@@ -18,6 +18,7 @@ class Task < ApplicationRecord
   has_many :time_registers
 
   before_create :update_orders_in_same_task_group
+  after_update :updates_changing_task_group
 
   def json_version
     json = as_json(only: [:id, :name, :description])
@@ -63,5 +64,16 @@ class Task < ApplicationRecord
 
     def update_orders_in_same_task_group
       task_group.add_one_to_task_orders
+    end
+
+    def updates_changing_task_group
+      previous_changes.each do |attribute, values|
+        if attribute == "task_group_id"
+          new_task_group_id = values[1]
+          new_task_group = TaskGroup.find(new_task_group_id)
+          new_task_group.add_one_to_task_orders(except: self)
+          update!(order: 1)
+        end
+      end
     end
 end

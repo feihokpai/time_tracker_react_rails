@@ -18,8 +18,11 @@ class TaskGroup < ApplicationRecord
     main_hash
   end
 
-  def add_one_to_task_orders
-    tasks.each(:increment_order)
+  def add_one_to_task_orders(except: nil)
+    target_tasks = tasks
+    target_tasks = target_tasks.reject { |task| task.id == except.id } if except.present?
+    tasks.each(&:increment_order)
+  end
   end
 
   def ordered_tasks
