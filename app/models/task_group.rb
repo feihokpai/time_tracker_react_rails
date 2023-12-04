@@ -14,7 +14,11 @@ class TaskGroup < ApplicationRecord
 
   def json_version
     main_hash = as_json(only: [:id, :name])
-    main_hash["tasks"] = tasks.map(&:json_version)
+    main_hash["tasks"] = ordered_tasks.map(&:json_version)
     main_hash
+  end
+
+  def ordered_tasks
+    tasks.order(:order)
   end
 end
