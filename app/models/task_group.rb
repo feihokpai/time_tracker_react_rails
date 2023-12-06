@@ -13,9 +13,20 @@ class TaskGroup < ApplicationRecord
   has_many :tasks
 
   def json_version
+    adjust_tasks_order_if_has_duplicates
     main_hash = as_json(only: [:id, :name])
     main_hash["tasks"] = ordered_tasks.map(&:json_version)
     main_hash
+  end
+
+  def adjust_tasks_order_if_has_duplicates
+    adjust_tasks_order if tasks.size != tasks.map(&:order).uniq.size
+  end
+
+  def adjust_tasks_order
+    ordered_tasks.each_with_index do |task, index|
+      task.update!(order: index)
+    end
   end
 
   def add_one_to_task_orders(except: nil)
