@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2022_06_29_150042) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_30_195156) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -28,6 +28,7 @@ ActiveRecord::Schema[7.1].define(version: 2022_06_29_150042) do
     t.bigint "task_group_id", null: false
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.integer "order", default: 1
     t.index ["task_group_id"], name: "index_tasks_on_task_group_id"
   end
 

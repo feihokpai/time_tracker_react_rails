@@ -8,6 +8,7 @@
 #  task_group_id :bigint           not null
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
+#  order         :integer          default(1)
 #
 require "rails_helper"
 

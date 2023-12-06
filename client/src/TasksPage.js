@@ -152,7 +152,25 @@ function TasksPage(){
   function processTask(task, index){
     return (
       <Row className="rowTask" key={index} title={task.description}>
-        <Col xs={8}>{task.name}</Col>        
+        <Col xs={1}>
+          <Container className="moveButtons">
+            <Row>
+              <Col>
+                <div className={ index === 0 ? "invisibleWithSpace" : "visible" } onClick={ () => moveTaskUp(task) }>
+                  <i className="bi bi-caret-up pointer-icon" title="Move task up"></i>
+                </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <div className={ index === lastIndexOfGroup(task) ? "invisibleWithSpace" : "visible" } onClick={ () => moveTaskDown(task) }>
+                  <i className="bi bi-caret-down pointer-icon" title="Move task down"></i>
+                </div>
+              </Col>
+            </Row>
+          </Container>
+        </Col>
+        <Col xs={7}>{task.name}</Col>        
         <Col className="taskButtonsColumn" xs={4}>
           <Container xs={2} title="Time the user spent in the task today">
             { task.duration_today != null && "("+task.duration_today+")" }
@@ -183,6 +201,21 @@ function TasksPage(){
         </Col>
       </Row>
     );
+  }
+
+  function moveTaskUp(task){
+    requestServer('POST', "tasks/"+task.id+"/move/", { order_type: "up" }, (json) => handleResponse(json), (err) => handleError(err));
+  }
+
+  function moveTaskDown(task){
+    requestServer('POST', "tasks/"+task.id+"/move/", { order_type: "down" }, (json) => handleResponse(json), (err) => handleError(err));
+  }
+
+  function lastIndexOfGroup(task){
+    let taskGroupId = task.task_group_id;
+    let taskGroup = data.find((taskGroup) => taskGroup.id === taskGroupId);
+    let size = taskGroup.tasks.length;
+    return size -1;
   }
 
   function calculateDuration(taskJson){

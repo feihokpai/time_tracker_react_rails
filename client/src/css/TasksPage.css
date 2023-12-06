@@ -33,3 +33,13 @@
 .pointer-icon {
   cursor: pointer;
 }
+
+.moveButtons .row{
+  line-height: 0;
+}
+
+.invisibleWithSpace {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.5s;
+}

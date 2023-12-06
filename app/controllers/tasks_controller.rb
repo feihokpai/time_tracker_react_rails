@@ -24,14 +24,24 @@ class TasksController < ApplicationController
     @task.stop if task_active?
     render json: { message: "Timer stopped" }
   rescue StandardError => ex
-    render json: { error: "Error trying to stop the task: #{ex.message}" }
+    render json: { status: 500, message: "Error trying to stop the task: #{ex.message}" }
   end
 
   def update
     @task.update!(name: params['name'], description: params['description'], task_group_id: params['task_group_id'])
     render json: { message: "Task edited" }
   rescue StandardError => ex
-    render json: { error: "Error trying to edit the task: #{ex.message}" }
+    puts ex.backtrace[0..10].split("\n")
+    render json: { status: 500, message: "Error trying to edit the task: #{ex.message}" }
+  end
+
+  def move_order
+    @task.task_group.move_up_order(@task) if params['order_type'] == "up"
+    @task.task_group.move_down_order(@task) if params['order_type'] == "down"
+    render json: { status: 200, message: "Task edited" }
+  rescue StandardError => ex
+    puts ex.backtrace[0..10].split("\n")
+    render json: { status: 500, error: "Error trying to edit the task: #{ex.message}" }
   end
 
   private
