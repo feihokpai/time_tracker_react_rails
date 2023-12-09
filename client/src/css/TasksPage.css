@@ -5,6 +5,11 @@
   color: white;  
 }
 
+.row .taskGroup{
+  padding-right: 0;
+  padding-left: 0;
+}
+
 .column-add-task-icon:hover {
   background-color: grey;
 }
