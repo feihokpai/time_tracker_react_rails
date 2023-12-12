@@ -14,6 +14,7 @@ function TasksPage(){
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [selectedTaskGroup, setSelectedTaskGroup] = useState(null);
+  const [creatingTaskGroup, setCreatingTaskGroup] = useState(false);
   const [editingTaskGroup, setEditingTaskGroup] = useState(false);
   const [intervalId, setIntervalId] = useState(null);
   const [lastTime, setLastTime] = useState(null);
@@ -90,11 +91,48 @@ function TasksPage(){
           </Row>        
         }
         <Row >
-          <Col xs={7}>
-            {data !== null && data.map(processTaskGroups)}
+          <Col xs={7}>            
+            { addFakeTaskGroupTab() }
+            {             
+              data !== null && data.map(processTaskGroups)
+            }
           </Col>
           <Col></Col>
         </Row>        
+      </Container>
+    );
+  }
+
+  function createFakeTaskGroupToAddNew(){
+    return { id: 0, name: "Add new Task Group", tasks: [] };
+  }
+
+  function addFakeTaskGroupTab(){
+    return (
+      <Container className="mb-3">
+        <Row >
+          <Col className="taskGroup">
+            <Container>
+              <Row>
+                <Col xs={1}>
+                </Col>
+                <Col >
+                  <TaskGroupEditableName taskGroup={createFakeTaskGroupToAddNew()} 
+                      editionEnabled={creatingTaskGroup} 
+                      onClickName={ () => { setCreatingTaskGroup(true) } }
+                      handleError={handleError}
+                      afterSave={handleResponse} />
+                </Col>
+              </Row>
+            </Container>
+          </Col>
+          <Col xs={2} className="taskGroup">
+            
+          </Col>
+          <Col xs={2} className="taskGroup">
+            
+          </Col>          
+        </Row>
       </Container>
     );
   }

@@ -1,5 +1,5 @@
 class TaskGroupsController < ApplicationController
-  before_action :load_model, except: :index
+  before_action :load_model, except: [:index, :create]
 
   def index    
     current_user ||= User.first
@@ -15,6 +15,13 @@ class TaskGroupsController < ApplicationController
     render json: { status: 200, message: "Task group updated successfully" }
   rescue StandardError => ex
     render json: { status: 500, message: ex.message }
+  end
+
+  def create
+    TaskGroup.create!(user: User.first, name: params['name'])
+    render json: { status: 200, message: "Task group saved successfully" }
+    rescue StandardError => ex
+      render json: { status: 500, message: ex.message }
   end
 
   private

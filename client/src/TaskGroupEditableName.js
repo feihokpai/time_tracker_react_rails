@@ -15,6 +15,8 @@ function TaskGroupEditableName(props){
   useEffect( () => {
     if(!props.editionEnabled){
       cancelEditing();
+    }else{
+      resetNewName();
     }
   }, [props.editionEnabled]);
 
@@ -30,7 +32,7 @@ function TaskGroupEditableName(props){
   }
 
   function resetNewName(){
-    setNewName(props.taskGroup.name);
+    props.taskGroup.id == 0 ? setNewName("") : setNewName(props.taskGroup.name);
   }
 
   function onClickName(){
@@ -52,11 +54,20 @@ function TaskGroupEditableName(props){
     setValidated(true);
     if(isNewNameValidated()){
       const parameters = { name: newName };
-      requestServer("POST", "task_groups/"+props.taskGroup.id+"/update", parameters, (json) => afterSave(json), (err) => props.handleError(err) );
+      requestSavingToServer(parameters);
+      
     }else{
       console.log("Validation failed");
     }
     avoidSubmit(event);
+  }
+
+  function requestSavingToServer(parameters){
+    if(props.taskGroup.id != 0){
+      requestServer("POST", "task_groups/"+props.taskGroup.id+"/update", parameters, (json) => afterSave(json), (err) => props.handleError(err) );
+    }else{
+      requestServer("POST", "task_groups/create", parameters, (json) => afterSave(json), (err) => props.handleError(err) );
+    }
   }
 
   function afterSave(json){
