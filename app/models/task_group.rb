@@ -7,6 +7,7 @@
 #  user_id    :bigint           not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  order      :integer          default(1)
 #
 class TaskGroup < ApplicationRecord
   belongs_to :user
@@ -25,7 +26,7 @@ class TaskGroup < ApplicationRecord
 
   def adjust_tasks_order
     ordered_tasks.each_with_index do |task, index|
-      task.update!(order: index)
+      task.update!(order: (index + 1))
     end
   end
 
