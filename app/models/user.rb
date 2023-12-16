@@ -14,6 +14,8 @@
 #  updated_at             :datetime         not null
 #
 class User < ApplicationRecord
+  include HasSortableList
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -21,4 +23,10 @@ class User < ApplicationRecord
 
   has_many :task_groups
   has_many :tasks, through: :task_groups
+
+  def sortable_items = task_groups
+
+  def adjust_tasks_order_if_has_duplicates = adjust_items_order_if_has_duplicates
+
+  def ordered_task_groups = ordered_items
 end

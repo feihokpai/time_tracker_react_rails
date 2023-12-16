@@ -145,6 +145,16 @@ function TasksPage(){
           <Col className="taskGroup">
             <Container>
               <Row>
+                <Col xs="auto" className="column-icon-move">
+                  <div className={ index === 0 ? "invisibleWithSpace" : "visible" } onClick={ (event) => moveTaskGroupUp(event, taskGroup) }>
+                    <i className="bi bi-caret-up pointer-icon" title="Move task group up"></i>
+                  </div>
+                </Col>
+                <Col xs="auto" className="column-icon-move">
+                  <div className={ index === (data.length - 1) ? "invisibleWithSpace" : "visible" } onClick={ (event) => moveTaskGroupDown(event, taskGroup) }>
+                    <i className="bi bi-caret-down pointer-icon" title="Move task group down"></i>
+                  </div>
+                </Col>
                 <Col xs={1} className="column-add-task-icon" onClick={ () => openModalToCreateTask(taskGroup) }>
                   <div><i className="bi bi-plus-circle pointer-icon" title="Create a new task"></i></div>
                 </Col>
@@ -175,6 +185,16 @@ function TasksPage(){
       setEditingTaskGroup(false);
     }
     setSelectedTaskGroup(taskGroup);
+  }
+
+  function moveTaskGroupUp(event, taskGroup){
+    event.stopPropagation();
+    requestServer('POST', "task_groups/"+taskGroup.id+"/move/", { order_type: "up" }, (json) => handleResponse(json), (err) => handleError(err));
+  }
+
+  function moveTaskGroupDown(event, taskGroup){
+    event.stopPropagation();
+    requestServer('POST', "task_groups/"+taskGroup.id+"/move/", { order_type: "down" }, (json) => handleResponse(json), (err) => handleError(err));
   }
 
   function taskGroupSelected(taskGroup){
