@@ -145,12 +145,12 @@ function TasksPage(){
           <Col className="taskGroup">
             <Container>
               <Row>
-                <Col xs={1}>
+                <Col xs="auto" className="column-icon-move">
                   <div className={ index === 0 ? "invisibleWithSpace" : "visible" } onClick={ (event) => moveTaskGroupUp(event, taskGroup) }>
                     <i className="bi bi-caret-up pointer-icon" title="Move task group up"></i>
                   </div>
                 </Col>
-                <Col xs={1}>
+                <Col xs="auto" className="column-icon-move">
                   <div className={ index === (data.length - 1) ? "invisibleWithSpace" : "visible" } onClick={ (event) => moveTaskGroupDown(event, taskGroup) }>
                     <i className="bi bi-caret-down pointer-icon" title="Move task group down"></i>
                   </div>

@@ -14,6 +14,11 @@
   background-color: grey;
 }
 
+.row .column-icon-move {
+  padding-right: 0;
+  padding-left: 0;
+}
+
 .rowTask:hover {
   background-color: grey;
 }
